@@ -63,7 +63,7 @@
                                 <td>987654321</td>
                                 <td>15/10/2023</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-secondary">Editar</button>
+                                    <button class="btn btn-sm btn-outline-danger">Eliminar</button>
                                 </td>
                             </tr>
                             <tr>
@@ -72,7 +72,7 @@
                                 <td>912345678</td>
                                 <td>20/10/2023</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-secondary">Editar</button>
+                                    <button class="btn btn-sm btn-outline-danger">Eliminar</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -92,7 +92,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="formCliente">
                         <div class="mb-3">
                             <label for="nombreCliente" class="form-label">Nombre Completo</label>
                             <input type="text" class="form-control" id="nombreCliente" placeholder="Ej. Luis Ramírez"
@@ -110,7 +110,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary">Guardar Cliente</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardar">Guardar Cliente</button>
                 </div>
             </div>
         </div>
@@ -119,6 +119,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+    
+    <script src="js/clientes.js"></script>
 </body>
 
 </html>
