@@ -57,7 +57,6 @@
                         </a>
                     </li>
 
-                    <!-- INVENTARIO ACTIVO -->
                     <li class="nav-item">
                         <a class="nav-link active" href="inventario.html">
                             Inventario
@@ -225,12 +224,18 @@
 
                                 <td>
 
-                                    <button class="btn btn-sm btn-outline-primary">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar">
+
                                         Editar
+
                                     </button>
 
-                                    <button class="btn btn-sm btn-outline-secondary">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#modalStock">
+
                                         Stock
+
                                     </button>
 
                                 </td>
@@ -256,16 +261,21 @@
 
                                 <td>
 
-                                    <button class="btn btn-sm btn-outline-primary">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar">
+
                                         Editar
+
                                     </button>
 
-                                    <button class="btn btn-sm btn-outline-secondary">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#modalStock">
+
                                         Stock
+
                                     </button>
 
                                 </td>
-
                             </tr>
 
 
@@ -287,12 +297,18 @@
 
                                 <td>
 
-                                    <button class="btn btn-sm btn-outline-primary">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar">
+
                                         Editar
+
                                     </button>
 
-                                    <button class="btn btn-sm btn-outline-secondary">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#modalStock">
+
                                         Stock
+
                                     </button>
 
                                 </td>
@@ -318,64 +334,49 @@
 
                                 <td>
 
-                                    <button class="btn btn-sm btn-outline-primary">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar">
+
                                         Editar
+
                                     </button>
 
-                                    <button class="btn btn-sm btn-outline-secondary">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                                        data-bs-target="#modalStock">
+
                                         Stock
                                     </button>
-
                                 </td>
-
                             </tr>
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
         </div>
-
     </main>
 
-
     <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
-
         <div class="modal-dialog">
-
             <div class="modal-content">
-
-                <div class="modal-header">
-
+                <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="modalProductoLabel">
                         Registrar nuevo producto
                     </h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">
                     </button>
-
                 </div>
-
-
-                <div class="modal-body">
-
-                    <form>
-
+                <form>
+                    <div class="modal-body">
                         <div class="mb-3">
-
                             <label for="nombreProducto" class="form-label">
                                 Nombre del producto
                             </label>
 
                             <input type="text" class="form-control" id="nombreProducto"
-                                placeholder="Ej. Shampoo Profesional">
+                                placeholder="Ej. Shampoo Profesional" required>
 
                         </div>
-
 
                         <div class="mb-3">
 
@@ -383,9 +384,9 @@
                                 Categoría
                             </label>
 
-                            <select class="form-select" id="categoriaProducto">
+                            <select class="form-select" id="categoriaProducto" required>
 
-                                <option selected>
+                                <option value="" selected disabled>
                                     Seleccionar categoría
                                 </option>
 
@@ -395,9 +396,7 @@
                                 <option>Otros</option>
 
                             </select>
-
                         </div>
-
 
                         <div class="row">
 
@@ -408,10 +407,9 @@
                                 </label>
 
                                 <input type="number" class="form-control" id="precioProducto" placeholder="0.00" min="0"
-                                    step="0.01">
+                                    step="0.01" required>
 
                             </div>
-
 
                             <div class="col-md-6 mb-3">
 
@@ -419,16 +417,100 @@
                                     Stock inicial
                                 </label>
 
-                                <input type="number" class="form-control" id="stockProducto" placeholder="0" min="0">
+                                <input type="number" class="form-control" id="stockProducto" placeholder="0" min="0"
+                                    required>
 
                             </div>
-
                         </div>
+                    </div>
 
-                    </form>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button type="submit" class="btn btn-primary">
+                            Guardar producto
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditar" tabindex="-1">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header bg-primary text-white">
+
+                    <h5 class="modal-title">
+                        Editar producto
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
 
                 </div>
 
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Nombre del producto
+                        </label>
+
+                        <input type="text" class="form-control" value="Shampoo Profesional">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Categoría
+                        </label>
+
+                        <select class="form-select">
+
+                            <option selected>
+                                Capilar
+                            </option>
+
+                            <option>
+                                Coloración
+                            </option>
+
+                            <option>
+                                Tratamiento
+                            </option>
+
+                            <option>
+                                Otros
+                            </option>
+
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Precio
+                        </label>
+
+                        <input type="number" class="form-control" value="35.00" step="0.01">
+
+                    </div>
+                </div>
 
                 <div class="modal-footer">
 
@@ -438,20 +520,93 @@
 
                     </button>
 
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
 
-                        Guardar producto
+                        Guardar cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal fade" id="modalStock" tabindex="-1">
+
+        <div class="modal-dialog modal-sm">
+
+            <div class="modal-content">
+
+                <div class="modal-header bg-warning">
+
+                    <h5 class="modal-title">
+                        Gestionar Stock
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
                     </button>
 
                 </div>
 
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Producto
+                        </label>
+
+                        <input type="text" class="form-control" value="Shampoo Profesional" readonly>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Stock actual
+                        </label>
+
+                        <input type="number" class="form-control" value="15" readonly>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Cantidad
+                        </label>
+
+                        <input type="number" class="form-control" value="1" min="1">
+
+                    </div>
+
+                    <div class="d-grid gap-2">
+
+                        <button type="button" class="btn btn-success">
+
+                            + Aumentar stock
+
+                        </button>
+                        <button type="button" class="btn btn-danger">
+
+                            - Disminuir stock
+
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+
+                        Cerrar
+
+                    </button>
+                </div>
             </div>
-
         </div>
-
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
         </script>
