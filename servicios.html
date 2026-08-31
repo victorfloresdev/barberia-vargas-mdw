@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbería Vargas - Servicios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                Barbería Vargas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="citas.html">Citas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="clientes.html">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="servicios.html">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">Inventario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-bold" href="ventas.html">Nueva Venta</a>
+                    </li>
+                </ul>
+                <div class="text-white align-items-center">
+                    <span>Usuario: Admin Vargas</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <header class="text-center mb-5">
+            <h1 class="fw-bold text-dark display-5">Catálogo de Servicios</h1>
+            <p class="text-muted fs-5">Atención personalizada con los mejores profesionales del rubro</p>
+        </header>
+
+        <div class="row g-4 mb-5">
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-dark">Popular</span>
+                            <span class="fw-bold fs-4 text-primary">S/ 25.00</span>
+                        </div>
+                        <h4 class="card-title fw-bold">Corte Clásico & Fade</h4>
+                        <p class="card-text text-muted flex-grow-1">Asesoría de imagen, degradado con navaja/máquina, lavado capilar y peinado con cera mate.</p>
+                        <button class="btn btn-outline-dark w-100 mt-3" data-bs-toggle="modal" data-bs-target="#modalReserva">
+                            Reservar este servicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-secondary">Cuidado Facial</span>
+                            <span class="fw-bold fs-4 text-primary">S/ 20.00</span>
+                        </div>
+                        <h4 class="card-title fw-bold">Perfilado de Barba</h4>
+                        <p class="card-text text-muted flex-grow-1">Ritual con toalla caliente, perfilado a navaja, hidratación con aceites y bálsamo revitalizante.</p>
+                        <button class="btn btn-outline-dark w-100 mt-3" data-bs-toggle="modal" data-bs-target="#modalReserva">
+                            Reservar este servicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0 border-top border-primary border-3">
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-warning text-dark">VIP</span>
+                            <span class="fw-bold fs-4 text-primary">S/ 40.00</span>
+                        </div>
+                        <h4 class="card-title fw-bold">Combo Vargas Deluxe</h4>
+                        <p class="card-text text-muted flex-grow-1">Corte completo, perfilado de barba, exfoliación facial con vaporizador de ozono y bebida de cortesía.</p>
+                        <button class="btn btn-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#modalReserva">
+                            Reservar este servicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="card shadow-sm border-0 p-4 mb-5">
+            <h3 class="fw-bold mb-3">Lista de Precios y Tiempos Estimados</h3>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Servicio</th>
+                            <th scope="col">Duración Estimada</th>
+                            <th scope="col">Especialista</th>
+                            <th scope="col">Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SRV-01</td>
+                            <td>Corte Clásico & Fade</td>
+                            <td>40 min</td>
+                            <td>Barbero General</td>
+                            <td class="fw-bold">S/ 25.00</td>
+                        </tr>
+                        <tr>
+                            <td>SRV-02</td>
+                            <td>Perfilado de Barba</td>
+                            <td>30 min</td>
+                            <td>Barbero General</td>
+                            <td class="fw-bold">S/ 20.00</td>
+                        </tr>
+                        <tr>
+                            <td>SRV-03</td>
+                            <td>Combo Vargas Deluxe</td>
+                            <td>60 min</td>
+                            <td>Master Barber</td>
+                            <td class="fw-bold">S/ 40.00</td>
+                        </tr>
+                        <tr>
+                            <td>SRV-04</td>
+                            <td>Tinte y Camuflaje de Canas</td>
+                            <td>45 min</td>
+                            <td>Colorista</td>
+                            <td class="fw-bold">S/ 35.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalLabel">Agendar Cita</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form>
+                        <div class="mb-3">
+                            <label for="clienteNombre" class="form-label fw-semibold">Nombre y Apellido</label>
+                            <input type="text" class="form-control" id="clienteNombre" placeholder="Ej. Juan Pérez" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="clienteTelefono" class="form-label fw-semibold">Teléfono / WhatsApp</label>
+                            <input type="tel" class="form-control" id="clienteTelefono" placeholder="Ej. 987654321" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="barberoSelect" class="form-label fw-semibold">Barbero Asignado</label>
+                            <select class="form-select" id="barberoSelect">
+                                <option selected>Cualquier barbero disponible</option>
+                                <option value="1">Víctor (Master Barber)</option>
+                                <option value="2">Carlos (Especialista en Barbas)</option>
+                                <option value="3">Diego (Fade & Cortes Clásicos)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaCita" class="form-label fw-semibold">Fecha y Hora</label>
+                            <input type="datetime-local" class="form-control" id="fechaCita" required>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="button" class="btn btn-primary btn-lg" data-bs-dismiss="modal">Confirmar Registro</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
