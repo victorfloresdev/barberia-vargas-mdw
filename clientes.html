@@ -63,7 +63,7 @@
                                 <td>987654321</td>
                                 <td>15/10/2023</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarCliente">Eliminar</button>
                                 </td>
                             </tr>
                             <tr>
@@ -72,7 +72,7 @@
                                 <td>912345678</td>
                                 <td>20/10/2023</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarCliente">Eliminar</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -111,6 +111,25 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" id="btnGuardar">Guardar Cliente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEliminarCliente" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalEliminarLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <p class="fs-5 mb-0">¿Estás seguro de que deseas eliminar este cliente?</p>
+                    <small class="text-muted">Esta acción no se puede deshacer.</small>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal" id="btnConfirmarEliminar">Sí, Eliminar</button>
                 </div>
             </div>
         </div>
