@@ -130,14 +130,14 @@
                                         <td>1</td>
                                         <td>S/ 25.00</td>
                                         <td>S/ 25.00</td>
-                                        <td><button class="btn btn-sm btn-danger">Eliminar</button></td>
+                                        <td><button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">Eliminar</button></td>
                                     </tr>
                                     <tr>
                                         <td>Pomada para cabello</td>
                                         <td>2</td>
                                         <td>S/ 35.00</td>
                                         <td>S/ 70.00</td>
-                                        <td><button class="btn btn-sm btn-danger">Eliminar</button></td>
+                                        <td><button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">Eliminar</button></td>
                                     </tr>
 
                                     <tr>
@@ -145,7 +145,7 @@
                                         <td>1</td>
                                         <td>S/ 150.00</td>
                                         <td>S/ 150.00</td>
-                                        <td><button class="btn btn-sm btn-danger">Eliminar</button></td>
+                                        <td><button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">Eliminar</button></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -168,9 +168,53 @@
     </div>
     </div>
 
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalEliminarLabel">Confirmar Acción</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este ítem de la cuenta?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Sí, eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const modalElement = document.getElementById('modalEliminar');
+            const btnConfirmar = document.getElementById('btnConfirmarEliminar');
+            
+            const modalInstancia = new bootstrap.Modal(modalElement);
+            
+            const textoOriginal = btnConfirmar.textContent;
+
+            btnConfirmar.addEventListener('click', () => {
+                
+                btnConfirmar.textContent = 'Eliminando...';
+                btnConfirmar.classList.add('disabled');
+
+                setTimeout(() => {
+                    modalInstancia.hide();
+
+                    setTimeout(() => {
+                        btnConfirmar.textContent = textoOriginal;
+                        btnConfirmar.classList.remove('disabled');
+                    }, 300); 
+
+                }, 600);
+            });
+        });
+    </script>
 </body>
 
 </html>
