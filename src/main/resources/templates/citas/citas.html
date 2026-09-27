@@ -13,41 +13,7 @@
 
 <body class="bg-body-tertiary">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold" href="index.html">
-                Barbería Vargas
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fw-semibold" href="citas.html">Citas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="clientes.html">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="servicios.html">Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="inventario.html">Inventario</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-warning fw-bold" href="ventas.html">Nueva Venta</a>
-                    </li>
-                </ul>
-                <div class="text-white align-items-center">
-                    <span>Usuario: Admin Vargas</span>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="layout :: navbar"></nav>
 
     <main class="container-fluid px-lg-5 my-4">
 
@@ -291,7 +257,7 @@
         <section class="card shadow-sm border-0 rounded-4 p-4 bg-white mb-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold mb-0 text-dark">Historial Detallado de Turnos</h5>
-                <span class="text-muted small">Total: 3 registros</span>
+                <span class="text-muted small">Total: <span th:text="${#lists.size(listaCitas)}">3</span> registros</span>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -307,37 +273,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span class="badge bg-dark-subtle text-dark-emphasis">#CT-101</span></td>
-                            <td class="fw-semibold">Juan Pérez</td>
-                            <td>Corte Fade</td>
-                            <td>31/08/2026</td>
-                            <td>09:00 AM</td>
-                            <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Confirmada</span></td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-light border rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#modalEditarCita"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalEliminarCita"><i class="bi bi-trash"></i></button>
+                        <tr th:each="cita : ${listaCitas}">
+                            <td><span class="badge bg-dark-subtle text-dark-emphasis" th:text="${cita.idCita}">#CT-101</span></td>
+                            <td class="fw-semibold" th:text="${cita.nombreCliente}">Juan Pérez</td>
+                            <td th:text="${cita.nombreServicio}">Corte Fade</td>
+                            <td th:text="${cita.fecha}">31/08/2026</td>
+                            <td th:text="${cita.hora}">09:00 AM</td>
+                            <td>
+                                <!-- Renderiza badge azul SOLO si el estado es 'Confirmada' -->
+                                <span th:if="${cita.estadoCita == 'Confirmada'}" class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
+                                <!-- Renderiza badge verde SOLO si está 'En Curso' o 'Atendida' -->
+                                <span th:if="${cita.estadoCita == 'En Curso' or cita.estadoCita == 'Atendida'}" class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
+                                <!-- Renderiza badge amarillo SOLO si está 'Pendiente' -->
+                                <span th:if="${cita.estadoCita == 'Pendiente'}" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
+                                <!-- Renderiza badge rojo SOLO si está 'Cancelada' -->
+                                <span th:if="${cita.estadoCita == 'Cancelada'}" class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
                             </td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge bg-dark-subtle text-dark-emphasis">#CT-102</span></td>
-                            <td class="fw-semibold">Carlos Ruiz</td>
-                            <td>Barba Spa</td>
-                            <td>02/09/2026</td>
-                            <td>09:00 AM</td>
-                            <td><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">En Curso</span></td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-light border rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#modalEditarCita"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalEliminarCita"><i class="bi bi-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge bg-dark-subtle text-dark-emphasis">#CT-103</span></td>
-                            <td class="fw-semibold">Marcos Lima</td>
-                            <td>Combo VIP</td>
-                            <td>01/09/2026</td>
-                            <td>11:00 AM</td>
-                            <td><span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill">Pendiente</span></td>
                             <td class="text-end">
                                 <button class="btn btn-sm btn-light border rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#modalEditarCita"><i class="bi bi-pencil"></i></button>
                                 <button class="btn btn-sm btn-outline-danger rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalEliminarCita"><i class="bi bi-trash"></i></button>
@@ -366,7 +317,7 @@
                             <label for="clienteNombre" class="form-label fw-semibold small text-muted">Nombre del Cliente</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
-                                <input type="text" class="form-control" id="clienteNombre" placeholder="Ej. Roberto Sánchez" required>
+                                <input type="text" class="form-control" id="clienteNombre" name="nombreCliente" placeholder="Ej. Roberto Sánchez" required>
                             </div>
                         </div>
 
@@ -374,28 +325,28 @@
                             <label for="clienteTel" class="form-label fw-semibold small text-muted">Teléfono / WhatsApp</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
-                                <input type="tel" class="form-control" id="clienteTel" placeholder="Ej. 987654321" required>
+                                <input type="tel" class="form-control" id="clienteTel" name="telefono" placeholder="Ej. 987654321" required>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="selectServicio" class="form-label fw-semibold small text-muted">Servicio</label>
-                            <select class="form-select" id="selectServicio" required>
+                            <select class="form-select" id="selectServicio" name="nombreServicio" required>
                                 <option selected disabled value="">Seleccionar...</option>
-                                <option value="1">Corte Fade - S/ 25.00</option>
-                                <option value="2">Barba Spa - S/ 20.00</option>
-                                <option value="3">Combo VIP - S/ 40.00</option>
+                                <option value="Corte Fade">Corte Fade - S/ 25.00</option>
+                                <option value="Barba Spa">Barba Spa - S/ 20.00</option>
+                                <option value="Combo VIP">Combo VIP - S/ 40.00</option>
                             </select>
                         </div>
 
                         <div class="row g-2 mb-4">
                             <div class="col-6">
                                 <label for="fechaCita" class="form-label fw-semibold small text-muted">Fecha</label>
-                                <input type="date" class="form-control" id="fechaCita" required>
+                                <input type="date" class="form-control" id="fechaCita" name="fecha" required>
                             </div>
                             <div class="col-6">
                                 <label for="horaCita" class="form-label fw-semibold small text-muted">Hora</label>
-                                <input type="time" class="form-control" id="horaCita" required>
+                                <input type="time" class="form-control" id="horaCita" name="hora" required>
                             </div>
                         </div>
 
@@ -422,26 +373,27 @@
                 </div>
                 <div class="modal-body p-4">
                     <form>
+                        <input type="hidden" id="editIdCita" name="idCita" value="#CT-101">
                         <div class="mb-3">
                             <label for="editClienteNombre" class="form-label fw-semibold small text-muted">Nombre del Cliente</label>
-                            <input type="text" class="form-control" id="editClienteNombre" value="Juan Pérez" required>
+                            <input type="text" class="form-control" id="editClienteNombre" name="nombreCliente" value="Juan Pérez" required>
                         </div>
                         <div class="mb-3">
                             <label for="editSelectServicio" class="form-label fw-semibold small text-muted">Servicio</label>
-                            <select class="form-select" id="editSelectServicio" required>
-                                <option value="1" selected>Corte Fade - S/ 25.00</option>
-                                <option value="2">Barba Spa - S/ 20.00</option>
-                                <option value="3">Combo VIP - S/ 40.00</option>
+                            <select class="form-select" id="editSelectServicio" name="nombreServicio" required>
+                                <option value="Corte Fade" selected>Corte Fade - S/ 25.00</option>
+                                <option value="Barba Spa">Barba Spa - S/ 20.00</option>
+                                <option value="Combo VIP">Combo VIP - S/ 40.00</option>
                             </select>
                         </div>
                         <div class="row g-2 mb-4">
                             <div class="col-6">
                                 <label for="editFechaCita" class="form-label fw-semibold small text-muted">Fecha</label>
-                                <input type="date" class="form-control" id="editFechaCita" value="2026-08-31" required>
+                                <input type="date" class="form-control" id="editFechaCita" name="fecha" value="2026-08-31" required>
                             </div>
                             <div class="col-6">
                                 <label for="editHoraCita" class="form-label fw-semibold small text-muted">Hora</label>
-                                <input type="time" class="form-control" id="editHoraCita" value="09:00" required>
+                                <input type="time" class="form-control" id="editHoraCita" name="hora" value="09:00" required>
                             </div>
                         </div>
                         <div class="d-grid">
