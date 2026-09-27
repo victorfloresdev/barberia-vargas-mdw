@@ -26,7 +26,6 @@
                 <h2 class="fw-bold text-dark mb-0">Control y Gestión de Citas</h2>
             </div>
             <div class="d-flex align-items-center gap-2 flex-wrap">
-                <!-- Botones de flechas funcionales para navegar semanas -->
                 <div class="btn-group shadow-xs" role="group">
                     <a th:href="@{/citas(offset=${offset - 1})}" class="btn btn-outline-secondary px-3" title="Semana anterior">
                         <i class="bi bi-chevron-left"></i>
@@ -44,7 +43,6 @@
             </div>
         </div>
 
-        <!-- Tarjetas Superiores de Métricas (Dinámicas) -->
         <div class="row g-3 mb-4">
             <div class="col-12 col-sm-4">
                 <div class="card border-0 shadow-sm rounded-4 h-100 p-3 bg-white">
@@ -98,7 +96,6 @@
             </div>
         </div>
 
-        <!-- Agenda Semanal en Cuadrícula Interactiva -->
         <section class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4 bg-white">
             <div class="card-header bg-dark text-white py-3 px-4">
                 <div class="row text-center fw-semibold d-none d-lg-flex align-items-center">
@@ -114,13 +111,11 @@
 
             <div class="card-body p-3">
 
-                <!-- Fila 09:00 AM -->
                 <div class="row g-2 border-bottom pb-3 mb-3 align-items-center">
                     <div class="col-12 col-lg-2 text-center text-lg-start">
                         <span class="badge bg-body-secondary text-dark px-3 py-2 rounded-3 fw-bold fs-6">09:00 AM</span>
                     </div>
                     
-                    <!-- Lunes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotLunes9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -136,7 +131,6 @@
                         </div>
                     </div>
 
-                    <!-- Martes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotMartes9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -152,7 +146,6 @@
                         </div>
                     </div>
 
-                    <!-- Miércoles -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotMiercoles9 != null}" class="card border-0 border-start border-4 border-success shadow-xs bg-success-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -168,7 +161,6 @@
                         </div>
                     </div>
 
-                    <!-- Jueves -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotJueves9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -184,7 +176,6 @@
                         </div>
                     </div>
 
-                    <!-- Viernes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotViernes9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -201,13 +192,11 @@
                     </div>
                 </div>
 
-                <!-- Fila 11:00 AM -->
                 <div class="row g-2 border-bottom pb-3 mb-3 align-items-center">
                     <div class="col-12 col-lg-2 text-center text-lg-start">
                         <span class="badge bg-body-secondary text-dark px-3 py-2 rounded-3 fw-bold fs-6">11:00 AM</span>
                     </div>
 
-                    <!-- Lunes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotLunes11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -223,7 +212,6 @@
                         </div>
                     </div>
 
-                    <!-- Martes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotMartes11 != null}" class="card border-0 border-start border-4 border-warning shadow-xs bg-warning-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -239,7 +227,6 @@
                         </div>
                     </div>
 
-                    <!-- Miércoles -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotMiercoles11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -255,7 +242,6 @@
                         </div>
                     </div>
 
-                    <!-- Jueves -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotJueves11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -271,7 +257,6 @@
                         </div>
                     </div>
 
-                    <!-- Viernes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotViernes11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -288,13 +273,11 @@
                     </div>
                 </div>
 
-                <!-- Fila 03:00 PM -->
                 <div class="row g-2 align-items-center">
                     <div class="col-12 col-lg-2 text-center text-lg-start">
                         <span class="badge bg-body-secondary text-dark px-3 py-2 rounded-3 fw-bold fs-6">03:00 PM</span>
                     </div>
 
-                    <!-- Lunes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotLunes15 != null}" class="card border-0 border-start border-4 border-info shadow-xs bg-info-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -310,7 +293,6 @@
                         </div>
                     </div>
 
-                    <!-- Martes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotMartes15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -326,7 +308,6 @@
                         </div>
                     </div>
 
-                    <!-- Miércoles -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotMiercoles15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -342,7 +323,6 @@
                         </div>
                     </div>
 
-                    <!-- Jueves -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotJueves15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -358,7 +338,6 @@
                         </div>
                     </div>
 
-                    <!-- Viernes -->
                     <div class="col-12 col-lg-2">
                         <div th:if="${slotViernes15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
@@ -377,7 +356,6 @@
             </div>
         </section>
 
-        <!-- Tabla Historial Detallado de Turnos -->
         <section class="card shadow-sm border-0 rounded-4 p-4 bg-white mb-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold mb-0 text-dark">Historial Detallado de Turnos</h5>
@@ -404,13 +382,9 @@
                             <td th:text="${cita.fecha}">2026-09-21</td>
                             <td th:text="${cita.hora}">09:00</td>
                             <td>
-                                <!-- Renderiza badge azul SOLO si el estado es 'Confirmada' -->
                                 <span th:if="${cita.estadoCita == 'Confirmada'}" class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
-                                <!-- Renderiza badge verde SOLO si está 'En Curso' o 'Atendida' -->
                                 <span th:if="${cita.estadoCita == 'En Curso' or cita.estadoCita == 'Atendida'}" class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
-                                <!-- Renderiza badge amarillo SOLO si está 'Pendiente' -->
                                 <span th:if="${cita.estadoCita == 'Pendiente'}" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
-                                <!-- Renderiza badge rojo SOLO si está 'Cancelada' -->
                                 <span th:if="${cita.estadoCita == 'Cancelada'}" class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
                             </td>
                             <td class="text-end">
@@ -437,7 +411,6 @@
 
     </main>
 
-    <!-- Modal Nueva Cita (Funcional con @ModelAttribute) -->
     <div class="modal fade" id="modalNuevaCita" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -502,7 +475,6 @@
         </div>
     </div>
 
-    <!-- Modal Editar Turno (Funcional con @ModelAttribute) -->
     <div class="modal fade" id="modalEditarCita" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -567,7 +539,6 @@
         </div>
     </div>
 
-    <!-- Modal Eliminar Turno (Funcional) -->
     <div class="modal fade" id="modalEliminarCita" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden text-center p-3">
@@ -601,7 +572,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Al hacer clic en un slot "Libre", preconfigurar fecha y hora en el modal de nueva cita
             document.querySelectorAll('.slot-libre').forEach(function (slot) {
                 slot.addEventListener('click', function () {
                     const f = this.getAttribute('data-fecha');
@@ -615,7 +585,6 @@
                 });
             });
 
-            // Pasar datos al modal de editar al hacer clic en el lápiz
             const modalEditar = document.getElementById('modalEditarCita');
             if (modalEditar) {
                 modalEditar.addEventListener('show.bs.modal', function (event) {
@@ -642,7 +611,6 @@
                 });
             }
 
-            // Pasar ID al modal de eliminar al hacer clic en la papelera
             const modalEliminar = document.getElementById('modalEliminarCita');
             if (modalEliminar) {
                 modalEliminar.addEventListener('show.bs.modal', function (event) {

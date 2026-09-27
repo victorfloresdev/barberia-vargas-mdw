@@ -27,9 +27,7 @@ public class VentasController {
     public String mostrarVentas(Model model) {
         model.addAttribute("nuevoItem", new ItemVenta());
 
-        /* carrito.add(new ItemVenta(1, "Corte de cabello", 1, 25.0, 25.0));
-        carrito.add(new ItemVenta(2, "Pomada para cabello", 2, 35.0,70.0));
-        carrito.add(new ItemVenta(3, "Balayage", 1, 150.0, 150.0)); */
+
         model.addAttribute("listaItems", carrito);
         double total = carrito.stream().mapToDouble(ItemVenta::getSubtotal).sum();
         model.addAttribute("totalVenta", total);
@@ -47,7 +45,7 @@ public class VentasController {
         
         carrito.add(nuevoItem);
         
-        // Redirigimos a la vista principal para evitar duplicar envíos al recargar
+
         return "redirect:/ventas";
     }
 
@@ -59,7 +57,6 @@ public class VentasController {
 
     @PostMapping("/ventas/registrar")
     public String registrarVenta() {
-        // Aquí iría la lógica de guardar en BD (APF3). Por ahora, vaciamos el carrito.
         carrito.clear();
         return "redirect:/ventas";
     }

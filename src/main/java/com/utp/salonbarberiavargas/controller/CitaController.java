@@ -27,7 +27,6 @@ public class CitaController {
         LocalDate hoy = LocalDate.now();
         LocalDate lunes = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         
-        // Citas en la semana actual (Lunes a Viernes)
         listaCitas.add(new Cita("#CT-101", "Juan Pérez", "987654321", "Corte Fade", lunes.toString(), "09:00", 25.0, "Confirmada"));
         listaCitas.add(new Cita("#CT-102", "Marcos Lima", "998877665", "Combo VIP", lunes.plusDays(1).toString(), "11:00", 40.0, "Pendiente"));
         listaCitas.add(new Cita("#CT-103", "Carlos Ruiz", "912345678", "Barba Spa", lunes.plusDays(2).toString(), "09:00", 20.0, "En Curso"));
@@ -35,10 +34,8 @@ public class CitaController {
         listaCitas.add(new Cita("#CT-105", "Luis Ramos", "923456789", "Colorimetría", lunes.plusDays(4).toString(), "15:00", 35.0, "Atendida"));
         listaCitas.add(new Cita("#CT-106", "Renato Paz", "934567890", "Fade Completo", lunes.plusDays(4).toString(), "15:00", 25.0, "Cancelada"));
 
-        // Cita para hoy (para que siempre haya registro visible en la fecha actual)
         listaCitas.add(new Cita("#CT-107", "Roberto Sánchez", "966554433", "Corte Fade", hoy.toString(), "09:00", 25.0, "Confirmada"));
 
-        // Próxima semana (para que al pulsar flecha '>' se aprecien turnos)
         LocalDate lunesSig = lunes.plusWeeks(1);
         listaCitas.add(new Cita("#CT-108", "Anderson Cruz", "955443322", "Corte Fade", lunesSig.toString(), "09:00", 25.0, "Confirmada"));
         listaCitas.add(new Cita("#CT-109", "Mateo Silva", "944332211", "Barba Spa", lunesSig.plusDays(2).toString(), "11:00", 20.0, "Pendiente"));
@@ -78,7 +75,6 @@ public class CitaController {
         model.addAttribute("listaCitas", listaCitas);
         model.addAttribute("offset", offset);
 
-        // Cálculo dinámico de fechas según offset semanal
         LocalDate hoy = LocalDate.now();
         LocalDate lunesBase = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate lunesSemana = lunesBase.plusWeeks(offset);
@@ -112,7 +108,6 @@ public class CitaController {
         model.addAttribute("diaViernesMes", obtenerNombreMes(fViernes.getMonthValue()));
         model.addAttribute("fechaViernes", fViernes.toString());
 
-        // Contadores superiores dinámicos
         model.addAttribute("citasProgramadas", listaCitas.size());
         
         long atendidas = listaCitas.stream()
@@ -125,22 +120,18 @@ public class CitaController {
             .count();
         model.addAttribute("citasPendientes", pendientes);
 
-        // Slots dinámicos para la cuadrícula semanal de turnos
-        // 09:00 AM
         model.addAttribute("slotLunes9", buscarSlotPorFechaHora(fLunes.toString(), "09:00"));
         model.addAttribute("slotMartes9", buscarSlotPorFechaHora(fMartes.toString(), "09:00"));
         model.addAttribute("slotMiercoles9", buscarSlotPorFechaHora(fMiercoles.toString(), "09:00"));
         model.addAttribute("slotJueves9", buscarSlotPorFechaHora(fJueves.toString(), "09:00"));
         model.addAttribute("slotViernes9", buscarSlotPorFechaHora(fViernes.toString(), "09:00"));
 
-        // 11:00 AM
         model.addAttribute("slotLunes11", buscarSlotPorFechaHora(fLunes.toString(), "11:00"));
         model.addAttribute("slotMartes11", buscarSlotPorFechaHora(fMartes.toString(), "11:00"));
         model.addAttribute("slotMiercoles11", buscarSlotPorFechaHora(fMiercoles.toString(), "11:00"));
         model.addAttribute("slotJueves11", buscarSlotPorFechaHora(fJueves.toString(), "11:00"));
         model.addAttribute("slotViernes11", buscarSlotPorFechaHora(fViernes.toString(), "11:00"));
 
-        // 03:00 PM (15:00)
         model.addAttribute("slotLunes15", buscarSlotPorFechaHora(fLunes.toString(), "15:00"));
         model.addAttribute("slotMartes15", buscarSlotPorFechaHora(fMartes.toString(), "15:00"));
         model.addAttribute("slotMiercoles15", buscarSlotPorFechaHora(fMiercoles.toString(), "15:00"));

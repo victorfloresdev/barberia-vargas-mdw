@@ -31,17 +31,14 @@ class CitaControllerTest {
                 .andExpect(model().attributeExists("citasProgramadas"))
                 .andExpect(model().attributeExists("citasAtendidas"))
                 .andExpect(model().attributeExists("citasPendientes"))
-                // Validar renderizado de badges condicionales
                 .andExpect(content().string(containsString("bg-primary-subtle text-primary border border-primary-subtle rounded-pill")))
                 .andExpect(content().string(containsString("bg-success-subtle text-success border border-success-subtle rounded-pill")))
                 .andExpect(content().string(containsString("bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill")))
                 .andExpect(content().string(containsString("bg-danger-subtle text-danger border border-danger-subtle rounded-pill")))
-                // Validar presencia de datos de prueba en la tabla
                 .andExpect(content().string(containsString("Juan Pérez")))
                 .andExpect(content().string(containsString("Carlos Ruiz")))
                 .andExpect(content().string(containsString("Marcos Lima")))
                 .andExpect(content().string(containsString("#CT-101")))
-                // Validar formularios funcionales con @ModelAttribute
                 .andExpect(content().string(containsString("action=\"/citas/agregar\"")))
                 .andExpect(content().string(containsString("action=\"/citas/editar\"")))
                 .andExpect(content().string(containsString("name=\"nombreCliente\"")))
