@@ -1,7 +1,10 @@
 package com.utp.salonbarberiavargas.controller;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -17,69 +20,143 @@ import com.utp.salonbarberiavargas.domain.citas.Cita;
 @Controller
 public class CitaController {
 
-    private List<Cita> listaCitas = new ArrayList<>(Arrays.asList(
-        new Cita("#CT-101", "Juan Pérez", "987654321", "Corte Fade", "2026-08-31", "09:00", 25.0, "Confirmada"),
-        new Cita("#CT-102", "Carlos Ruiz", "912345678", "Barba Spa", "2026-09-02", "09:00", 20.0, "En Curso"),
-        new Cita("#CT-103", "Marcos Lima", "998877665", "Combo VIP", "2026-09-01", "11:00", 40.0, "Pendiente"),
-        new Cita("#CT-104", "David Solís", "945612378", "Corte Clásico", "2026-09-03", "11:00", 25.0, "Confirmada"),
-        new Cita("#CT-105", "Luis Ramos", "923456789", "Colorimetría", "2026-09-04", "15:00", 35.0, "Atendida"),
-        new Cita("#CT-106", "Renato Paz", "934567890", "Fade Completo", "2026-09-04", "15:00", 25.0, "Cancelada")
-    ));
+    private List<Cita> listaCitas = new ArrayList<>();
+    private int contadorId = 110;
 
-    private int contadorId = 107;
+    public CitaController() {
+        LocalDate hoy = LocalDate.now();
+        LocalDate lunes = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        
+        // Citas en la semana actual (Lunes a Viernes)
+        listaCitas.add(new Cita("#CT-101", "Juan Pérez", "987654321", "Corte Fade", lunes.toString(), "09:00", 25.0, "Confirmada"));
+        listaCitas.add(new Cita("#CT-102", "Marcos Lima", "998877665", "Combo VIP", lunes.plusDays(1).toString(), "11:00", 40.0, "Pendiente"));
+        listaCitas.add(new Cita("#CT-103", "Carlos Ruiz", "912345678", "Barba Spa", lunes.plusDays(2).toString(), "09:00", 20.0, "En Curso"));
+        listaCitas.add(new Cita("#CT-104", "David Solís", "945612378", "Corte Clásico", lunes.plusDays(3).toString(), "11:00", 25.0, "Confirmada"));
+        listaCitas.add(new Cita("#CT-105", "Luis Ramos", "923456789", "Colorimetría", lunes.plusDays(4).toString(), "15:00", 35.0, "Atendida"));
+        listaCitas.add(new Cita("#CT-106", "Renato Paz", "934567890", "Fade Completo", lunes.plusDays(4).toString(), "15:00", 25.0, "Cancelada"));
 
-    private Cita buscarSlot(String dia, String horaPrefix) {
+        // Cita para hoy (para que siempre haya registro visible en la fecha actual)
+        listaCitas.add(new Cita("#CT-107", "Roberto Sánchez", "966554433", "Corte Fade", hoy.toString(), "09:00", 25.0, "Confirmada"));
+
+        // Próxima semana (para que al pulsar flecha '>' se aprecien turnos)
+        LocalDate lunesSig = lunes.plusWeeks(1);
+        listaCitas.add(new Cita("#CT-108", "Anderson Cruz", "955443322", "Corte Fade", lunesSig.toString(), "09:00", 25.0, "Confirmada"));
+        listaCitas.add(new Cita("#CT-109", "Mateo Silva", "944332211", "Barba Spa", lunesSig.plusDays(2).toString(), "11:00", 20.0, "Pendiente"));
+    }
+
+    private String obtenerNombreMes(int mes) {
+        String[] meses = {
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        };
+        if (mes >= 1 && mes <= 12) {
+            return meses[mes - 1];
+        }
+        return "";
+    }
+
+    private Cita buscarSlotPorFechaHora(String fechaExacta, String horaTarget) {
         return listaCitas.stream()
-            .filter(c -> c.getFecha() != null && c.getFecha().contains(dia) 
-                      && c.getHora() != null && (c.getHora().startsWith(horaPrefix) || c.getHora().contains(horaPrefix)))
+            .filter(c -> {
+                if (c.getFecha() == null || c.getHora() == null) return false;
+                boolean matchFecha = c.getFecha().equalsIgnoreCase(fechaExacta)
+                    || c.getFecha().replace("-", "/").contains(fechaExacta.replace("-", "/"));
+                
+                boolean matchHora = c.getHora().startsWith(horaTarget) 
+                    || (horaTarget.equals("15:00") && (c.getHora().contains("03:00") || c.getHora().contains("3:00") || c.getHora().contains("15:00")))
+                    || (horaTarget.equals("09:00") && (c.getHora().contains("09:00") || c.getHora().contains("9:00")))
+                    || (horaTarget.equals("11:00") && c.getHora().contains("11:00"));
+
+                return matchFecha && matchHora;
+            })
             .findFirst()
             .orElse(null);
     }
 
     @GetMapping("/citas")
-    public String mostrarCitas(Model model) {
+    public String mostrarCitas(@RequestParam(name = "offset", defaultValue = "0") int offset, Model model) {
         model.addAttribute("listaCitas", listaCitas);
+        model.addAttribute("offset", offset);
 
-        // Contadores dinámicos para las tarjetas superiores (cards)
+        // Cálculo dinámico de fechas según offset semanal
+        LocalDate hoy = LocalDate.now();
+        LocalDate lunesBase = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate lunesSemana = lunesBase.plusWeeks(offset);
+
+        int semanaNum = lunesSemana.get(WeekFields.ISO.weekOfYear());
+        model.addAttribute("semanaNumero", semanaNum);
+
+        LocalDate fLunes = lunesSemana;
+        LocalDate fMartes = lunesSemana.plusDays(1);
+        LocalDate fMiercoles = lunesSemana.plusDays(2);
+        LocalDate fJueves = lunesSemana.plusDays(3);
+        LocalDate fViernes = lunesSemana.plusDays(4);
+
+        model.addAttribute("diaLunesNum", String.format("%02d", fLunes.getDayOfMonth()));
+        model.addAttribute("diaLunesMes", obtenerNombreMes(fLunes.getMonthValue()));
+        model.addAttribute("fechaLunes", fLunes.toString());
+
+        model.addAttribute("diaMartesNum", String.format("%02d", fMartes.getDayOfMonth()));
+        model.addAttribute("diaMartesMes", obtenerNombreMes(fMartes.getMonthValue()));
+        model.addAttribute("fechaMartes", fMartes.toString());
+
+        model.addAttribute("diaMiercolesNum", String.format("%02d", fMiercoles.getDayOfMonth()));
+        model.addAttribute("diaMiercolesMes", obtenerNombreMes(fMiercoles.getMonthValue()));
+        model.addAttribute("fechaMiercoles", fMiercoles.toString());
+
+        model.addAttribute("diaJuevesNum", String.format("%02d", fJueves.getDayOfMonth()));
+        model.addAttribute("diaJuevesMes", obtenerNombreMes(fJueves.getMonthValue()));
+        model.addAttribute("fechaJueves", fJueves.toString());
+
+        model.addAttribute("diaViernesNum", String.format("%02d", fViernes.getDayOfMonth()));
+        model.addAttribute("diaViernesMes", obtenerNombreMes(fViernes.getMonthValue()));
+        model.addAttribute("fechaViernes", fViernes.toString());
+
+        // Contadores superiores dinámicos
         model.addAttribute("citasProgramadas", listaCitas.size());
+        
         long atendidas = listaCitas.stream()
             .filter(c -> "Atendida".equalsIgnoreCase(c.getEstadoCita()) || "En Curso".equalsIgnoreCase(c.getEstadoCita()))
             .count();
         model.addAttribute("citasAtendidas", atendidas);
+
         long pendientes = listaCitas.stream()
             .filter(c -> "Pendiente".equalsIgnoreCase(c.getEstadoCita()))
             .count();
         model.addAttribute("citasPendientes", pendientes);
 
-        // Citas para la cuadrícula semanal interactiva (cards de la agenda)
-        model.addAttribute("slotLunes9", buscarSlot("31", "09"));
-        model.addAttribute("slotMartes9", buscarSlot("01", "09"));
-        model.addAttribute("slotMiercoles9", buscarSlot("02", "09"));
-        model.addAttribute("slotJueves9", buscarSlot("03", "09"));
-        model.addAttribute("slotViernes9", buscarSlot("04", "09"));
+        // Slots dinámicos para la cuadrícula semanal de turnos
+        // 09:00 AM
+        model.addAttribute("slotLunes9", buscarSlotPorFechaHora(fLunes.toString(), "09:00"));
+        model.addAttribute("slotMartes9", buscarSlotPorFechaHora(fMartes.toString(), "09:00"));
+        model.addAttribute("slotMiercoles9", buscarSlotPorFechaHora(fMiercoles.toString(), "09:00"));
+        model.addAttribute("slotJueves9", buscarSlotPorFechaHora(fJueves.toString(), "09:00"));
+        model.addAttribute("slotViernes9", buscarSlotPorFechaHora(fViernes.toString(), "09:00"));
 
-        model.addAttribute("slotLunes11", buscarSlot("31", "11"));
-        model.addAttribute("slotMartes11", buscarSlot("01", "11"));
-        model.addAttribute("slotMiercoles11", buscarSlot("02", "11"));
-        model.addAttribute("slotJueves11", buscarSlot("03", "11"));
-        model.addAttribute("slotViernes11", buscarSlot("04", "11"));
+        // 11:00 AM
+        model.addAttribute("slotLunes11", buscarSlotPorFechaHora(fLunes.toString(), "11:00"));
+        model.addAttribute("slotMartes11", buscarSlotPorFechaHora(fMartes.toString(), "11:00"));
+        model.addAttribute("slotMiercoles11", buscarSlotPorFechaHora(fMiercoles.toString(), "11:00"));
+        model.addAttribute("slotJueves11", buscarSlotPorFechaHora(fJueves.toString(), "11:00"));
+        model.addAttribute("slotViernes11", buscarSlotPorFechaHora(fViernes.toString(), "11:00"));
 
-        model.addAttribute("slotLunes15", buscarSlot("31", "15"));
-        model.addAttribute("slotMartes15", buscarSlot("01", "15"));
-        model.addAttribute("slotMiercoles15", buscarSlot("02", "15"));
-        model.addAttribute("slotJueves15", buscarSlot("03", "15"));
-        model.addAttribute("slotViernes15", buscarSlot("04", "15"));
+        // 03:00 PM (15:00)
+        model.addAttribute("slotLunes15", buscarSlotPorFechaHora(fLunes.toString(), "15:00"));
+        model.addAttribute("slotMartes15", buscarSlotPorFechaHora(fMartes.toString(), "15:00"));
+        model.addAttribute("slotMiercoles15", buscarSlotPorFechaHora(fMiercoles.toString(), "15:00"));
+        model.addAttribute("slotJueves15", buscarSlotPorFechaHora(fJueves.toString(), "15:00"));
+        model.addAttribute("slotViernes15", buscarSlotPorFechaHora(fViernes.toString(), "15:00"));
 
         return "citas/citas";
     }
 
     @PostMapping("/citas/agregar")
-    public String agregarCita(@ModelAttribute Cita nuevaCita) {
+    public String agregarCita(@ModelAttribute Cita nuevaCita, @RequestParam(name = "offset", defaultValue = "0") int offset) {
         if (nuevaCita.getIdCita() == null || nuevaCita.getIdCita().isBlank()) {
             nuevaCita.setIdCita("#CT-" + (contadorId++));
         }
         if (nuevaCita.getEstadoCita() == null || nuevaCita.getEstadoCita().isBlank()) {
-            nuevaCita.setEstadoCita("Pendiente");
+            nuevaCita.setEstadoCita("Confirmada");
         }
         if (nuevaCita.getPrecio() <= 0) {
             if ("Barba Spa".equalsIgnoreCase(nuevaCita.getNombreServicio())) {
@@ -93,11 +170,11 @@ public class CitaController {
             }
         }
         listaCitas.add(nuevaCita);
-        return "redirect:/citas";
+        return redireccionar(offset);
     }
 
     @PostMapping("/citas/editar")
-    public String editarCita(@ModelAttribute Cita citaEditada) {
+    public String editarCita(@ModelAttribute Cita citaEditada, @RequestParam(name = "offset", defaultValue = "0") int offset) {
         for (Cita c : listaCitas) {
             if (c.getIdCita().equalsIgnoreCase(citaEditada.getIdCita())) {
                 c.setNombreCliente(citaEditada.getNombreCliente());
@@ -122,18 +199,22 @@ public class CitaController {
                 break;
             }
         }
-        return "redirect:/citas";
+        return redireccionar(offset);
     }
 
     @PostMapping("/citas/eliminar/{id}")
-    public String eliminarCita(@PathVariable("id") String id) {
+    public String eliminarCita(@PathVariable("id") String id, @RequestParam(name = "offset", defaultValue = "0") int offset) {
         listaCitas.removeIf(c -> c.getIdCita().equalsIgnoreCase(id) 
                               || c.getIdCita().replace("#", "").equalsIgnoreCase(id.replace("#", "")));
-        return "redirect:/citas";
+        return redireccionar(offset);
     }
 
     @PostMapping("/citas/eliminar")
-    public String eliminarCitaPost(@RequestParam("idCita") String idCita) {
-        return eliminarCita(idCita);
+    public String eliminarCitaPost(@RequestParam("idCita") String idCita, @RequestParam(name = "offset", defaultValue = "0") int offset) {
+        return eliminarCita(idCita, offset);
+    }
+
+    private String redireccionar(int offset) {
+        return (offset != 0) ? ("redirect:/citas?offset=" + offset) : "redirect:/citas";
     }
 }
