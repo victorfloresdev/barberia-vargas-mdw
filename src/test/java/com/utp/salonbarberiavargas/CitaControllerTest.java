@@ -8,10 +8,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.utp.salonbarberiavargas.controller.CitaController;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -27,7 +28,9 @@ class CitaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("citas/citas"))
                 .andExpect(model().attributeExists("listaCitas"))
-                .andExpect(model().attribute("listaCitas", hasSize(6)))
+                .andExpect(model().attributeExists("citasProgramadas"))
+                .andExpect(model().attributeExists("citasAtendidas"))
+                .andExpect(model().attributeExists("citasPendientes"))
                 // Validar renderizado de badges condicionales
                 .andExpect(content().string(containsString("bg-primary-subtle text-primary border border-primary-subtle rounded-pill")))
                 .andExpect(content().string(containsString("bg-success-subtle text-success border border-success-subtle rounded-pill")))
@@ -38,11 +41,45 @@ class CitaControllerTest {
                 .andExpect(content().string(containsString("Carlos Ruiz")))
                 .andExpect(content().string(containsString("Marcos Lima")))
                 .andExpect(content().string(containsString("#CT-101")))
-                // Validar atributos 'name' en inputs del modal para @ModelAttribute
+                // Validar formularios funcionales con @ModelAttribute
+                .andExpect(content().string(containsString("action=\"/citas/agregar\"")))
+                .andExpect(content().string(containsString("action=\"/citas/editar\"")))
                 .andExpect(content().string(containsString("name=\"nombreCliente\"")))
                 .andExpect(content().string(containsString("name=\"telefono\"")))
                 .andExpect(content().string(containsString("name=\"nombreServicio\"")))
                 .andExpect(content().string(containsString("name=\"fecha\"")))
                 .andExpect(content().string(containsString("name=\"hora\"")));
+    }
+
+    @Test
+    void testAgregarCita() throws Exception {
+        mockMvc.perform(post("/citas/agregar")
+                .param("nombreCliente", "Nuevo Cliente")
+                .param("telefono", "911222333")
+                .param("nombreServicio", "Corte Fade")
+                .param("fecha", "2026-09-01")
+                .param("hora", "10:00"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/citas"));
+    }
+
+    @Test
+    void testEditarCita() throws Exception {
+        mockMvc.perform(post("/citas/editar")
+                .param("idCita", "#CT-101")
+                .param("nombreCliente", "Juan Pérez Editado")
+                .param("nombreServicio", "Barba Spa")
+                .param("fecha", "2026-08-31")
+                .param("hora", "09:00")
+                .param("estadoCita", "En Curso"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/citas"));
+    }
+
+    @Test
+    void testEliminarCita() throws Exception {
+        mockMvc.perform(post("/citas/eliminar/CT-101"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/citas"));
     }
 }
