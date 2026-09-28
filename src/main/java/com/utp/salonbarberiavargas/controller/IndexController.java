@@ -21,10 +21,5 @@ public class IndexController {
 
         return "index";
     }
-
-    @GetMapping("/clientes")
-    public String mostrarVistaCliente() {
-        return "clientes/clientes";
-    }
     
 }
