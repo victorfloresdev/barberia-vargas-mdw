@@ -7,33 +7,12 @@
     <title>Clientes - Barbería Vargas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body class="bg-light">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Barbería Vargas</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="citas.html">Citas</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="clientes.html">Clientes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="inventario.html">Inventario</a></li>
-                    <li class="nav-item"><a class="nav-link text-warning fw-bold" href="ventas.html">Nueva Venta</a>
-                    </li>
-                </ul>
-                <div class="text-white align-items-center">
-                    <span>Usuario: Admin Vargas</span>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="layout :: navbar"></nav>
 
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -57,22 +36,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#001</td>
-                                <td>Juan Pérez</td>
-                                <td>987654321</td>
-                                <td>15/10/2023</td>
+                            <tr th:each="cliente : ${listaClientes}">
+                                <td th:text="${cliente.id}">#000</td>
+                                <td th:text="${cliente.nombreCompleto}">Nombre del Cliente</td>
+                                <td th:text="${cliente.telefono}">999000111</td>
+                                <td th:text="${cliente.ultimaVisita}">01/01/2026</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarCliente">Eliminar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#002</td>
-                                <td>Carlos Mendoza</td>
-                                <td>912345678</td>
-                                <td>20/10/2023</td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarCliente">Eliminar</button>
+                                    <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarCliente" th:data-id="${cliente.id}"
+                                        th:data-nombre="${cliente.nombreCompleto}"
+                                        th:data-telefono="${cliente.telefono}" th:data-visita="${cliente.ultimaVisita}">
+                                        Editar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalEliminarCliente" th:data-id="${cliente.id}">
+                                        Eliminar
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -91,46 +70,87 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="formCliente">
+                <form th:action="@{/clientes/guardar}" method="post">
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label for="nombreCliente" class="form-label">Nombre Completo</label>
-                            <input type="text" class="form-control" id="nombreCliente" placeholder="Ej. Luis Ramírez"
-                                required>
+                            <input type="text" class="form-control" id="nombreCliente" name="nombreCompleto"
+                                placeholder="Ej. Luis Ramírez" required>
                         </div>
                         <div class="mb-3">
                             <label for="telefonoCliente" class="form-label">Teléfono</label>
-                            <input type="tel" class="form-control" id="telefonoCliente" placeholder="999 888 777">
+                            <input type="tel" class="form-control" id="telefonoCliente" name="telefono"
+                                placeholder="999 888 777" required>
                         </div>
                         <div class="mb-3">
-                            <label for="emailCliente" class="form-label">Correo Electrónico (Opcional)</label>
-                            <input type="email" class="form-control" id="emailCliente" placeholder="luis@correo.com">
+                            <label for="visitaCliente" class="form-label">Última Visita</label>
+                            <input type="text" class="form-control" id="visitaCliente" name="ultimaVisita"
+                                placeholder="DD/MM/AAAA">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardar">Guardar Cliente</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalEliminarCliente" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="modalEditarClienteLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title" id="modalEditarClienteLabel">Editar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/clientes/actualizar}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="editId" name="id">
+
+                        <div class="mb-3">
+                            <label for="editNombre" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="editNombre" name="nombreCompleto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editTelefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="editTelefono" name="telefono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVisita" class="form-label">Última Visita</label>
+                            <input type="text" class="form-control" id="editVisita" name="ultimaVisita">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEliminarCliente" tabindex="-1" aria-labelledby="modalEliminarLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title" id="modalEliminarLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center py-4">
-                    <p class="fs-5 mb-0">¿Estás seguro de que deseas eliminar este cliente?</p>
-                    <small class="text-muted">Esta acción no se puede deshacer.</small>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal" id="btnConfirmarEliminar">Sí, Eliminar</button>
-                </div>
+                <form th:action="@{/clientes/eliminar}" method="post">
+                    <div class="modal-body text-center py-4">
+                        <input type="hidden" id="deleteId" name="id">
+                        <p class="fs-5 mb-0">¿Estás seguro de que deseas eliminar este cliente?</p>
+                        <small class="text-muted">Esta acción no se puede deshacer.</small>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger px-4">Sí, Eliminar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -138,8 +158,36 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    
-    <script src="js/clientes.js"></script>
+
+    <script th:src="@{/js/clientes.js}"></script>
+
+    <script>
+        const modalEditar = document.getElementById('modalEditarCliente');
+        if (modalEditar) {
+            modalEditar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+
+                const id = button.getAttribute('data-id');
+                const nombre = button.getAttribute('data-nombre');
+                const telefono = button.getAttribute('data-telefono');
+                const visita = button.getAttribute('data-visita');
+
+                document.getElementById('editId').value = id;
+                document.getElementById('editNombre').value = nombre;
+                document.getElementById('editTelefono').value = telefono;
+                document.getElementById('editVisita').value = visita;
+            });
+        }
+
+        const modalEliminar = document.getElementById('modalEliminarCliente');
+        if (modalEliminar) {
+            modalEliminar.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                document.getElementById('deleteId').value = id;
+            });
+        }
+    </script>
 </body>
 
 </html>
