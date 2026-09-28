@@ -6,6 +6,8 @@ public class Cliente {
     private String telefono;
     private String ultimaVisita;
 
+    public Cliente() {}
+
     public Cliente(String id, String nombreCompleto, String telefono, String ultimaVisita) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;

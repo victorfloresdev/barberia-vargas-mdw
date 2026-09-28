@@ -21,19 +21,19 @@
                     </div>
                     <div class="card-body p-4">
                         <h5 class="card-title text-center mb-4">Iniciar Sesión</h5>
-                        <form action="index.html">
+                        <form th:action="@{/clientes}" method="get">
                             <div class="mb-3">
                                 <label for="usuario" class="form-label">Usuario o Correo</label>
-                                <input type="text" class="form-control" id="usuario" placeholder="ejemplo@correo.com"
-                                    required>
+                                <input type="text" class="form-control" id="usuario" name="usuario"
+                                    placeholder="ejemplo@correo.com" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" placeholder="********"
-                                    required>
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="********" required>
                             </div>
                             <div class="d-grid mt-4">
-                                <a href="index.html" class="btn btn-primary">Ingresar</a>
+                                <button type="submit" class="btn btn-primary">Ingresar</button>
                             </div>
                         </form>
                     </div>
