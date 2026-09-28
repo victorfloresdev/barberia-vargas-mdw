@@ -39,7 +39,6 @@ public class VentasController {
 
     @PostMapping("/ventas/agregar")
     public String agregarItem(@ModelAttribute("nuevoItem") ItemVenta nuevoItem) {
-        // Completamos los datos faltantes antes de guardar en la lista
         nuevoItem.setId(contadorId++);
         nuevoItem.setSubtotal(nuevoItem.getCantidad() * nuevoItem.getPrecioUnitario());
         
