@@ -1,350 +1,96 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Salón Barbería Vargas - Inventario</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="css/style.css">
+    <title>Inventario - Salón Barbería Vargas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .table thead th {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        .modal-header-custom {
+            background-color: #212529;
+            color: #ffffff;
+            border-top-left-radius: calc(0.5rem - 1px);
+            border-top-right-radius: calc(0.5rem - 1px);
+        }
+    </style>
 </head>
-
 <body class="bg-light">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav th:replace="layout :: navbar"></nav>
 
-        <div class="container-fluid">
-
-            <a class="navbar-brand" href="index.html">
-                Barbería Vargas
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-
-                <span class="navbar-toggler-icon"></span>
-
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-
-                <ul class="navbar-nav me-auto">
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">
-                            Dashboard
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="citas.html">
-                            Citas
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="clientes.html">
-                            Clientes
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="servicios.html">
-                            Servicios
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="inventario.html">
-                            Inventario
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-warning fw-bold" href="ventas.html">
-                            Nueva Venta
-                        </a>
-                    </li>
-
-                </ul>
-
-                <div class="text-white align-items-center">
-                    <span>Usuario: Admin Vargas</span>
-                </div>
-
-            </div>
-        </div>
-    </nav>
-
-    <main class="container mt-4">
-
+    <main class="container my-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-
             <div>
-                <h2>Control de Inventario</h2>
-
-                <p class="text-muted mb-0">
-                    Gestión de productos y control de stock
-                </p>
+                <h2 class="fw-bold mb-0 text-dark">Control de Inventario</h2>
+                <p class="text-muted mb-0">Gestión de productos y niveles de existencias</p>
             </div>
-
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">
-
-                + Nuevo Producto
-
+            <button class="btn btn-dark px-3 py-2 shadow-sm d-flex align-items-center gap-2" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalProducto" 
+                    onclick="prepararNuevo()">
+                <i class="bi bi-plus-circle"></i>
+                <span class="fw-semibold">Registrar Producto</span>
             </button>
-
         </div>
 
-
-        <div class="row g-3 mb-4">
-
-            <div class="col-12 col-md-4">
-
-                <div class="card shadow-sm">
-
-                    <div class="card-body">
-
-                        <h6 class="text-muted">
-                            Total de productos
-                        </h6>
-
-                        <h2>12</h2>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-12 col-md-4">
-
-                <div class="card shadow-sm">
-
-                    <div class="card-body">
-
-                        <h6 class="text-muted">
-                            Productos con stock bajo
-                        </h6>
-
-                        <h2 class="text-warning">
-                            3
-                        </h2>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-12 col-md-4">
-
-                <div class="card shadow-sm">
-
-                    <div class="card-body">
-
-                        <h6 class="text-muted">
-                            Productos agotados
-                        </h6>
-
-                        <h2 class="text-danger">
-                            1
-                        </h2>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="card shadow-sm">
-
-            <div class="card-header bg-white">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <h5 class="mb-0">
-                        Productos registrados
-                    </h5>
-
-                    <input type="text" class="form-control" placeholder="Buscar producto..." style="max-width: 250px;">
-
-                </div>
-
-            </div>
-
-
-            <div class="card-body">
-
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-0">
                 <div class="table-responsive">
-
-                    <table class="table table-hover table-striped align-middle">
-
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-dark">
-
                             <tr>
-
+                                <th class="ps-4">Código</th>
                                 <th>Producto</th>
                                 <th>Categoría</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
-
+                                <th class="text-end pe-4">Acciones</th>
                             </tr>
-
                         </thead>
-
-
                         <tbody>
-
-                            <tr>
-
-                                <td>Shampoo Profesional</td>
-
-                                <td>Capilar</td>
-
-                                <td>S/ 35.00</td>
-
-                                <td>15</td>
-
+                            <tr th:each="prod : ${listaProductos}">
+                                <td class="ps-4 fw-semibold text-secondary" th:text="${prod.id}">PRD-00</td>
+                                <td class="fw-medium text-dark" th:text="${prod.nombre}">Nombre Producto</td>
                                 <td>
-                                    <span class="badge text-bg-success">
-                                        Disponible
-                                    </span>
+                                    <span class="badge bg-secondary-subtle text-secondary border px-2 py-1" th:text="${prod.categoria}">Categoría</span>
                                 </td>
-
+                                <td class="fw-semibold" th:text="'S/ ' + ${prod.precio}">S/ 0.00</td>
+                                <td class="fw-bold fs-6" th:text="${prod.stock}">0</td>
                                 <td>
-
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditar">
-
-                                        Editar
-
+                                    <span th:if="${prod.stock > 5}" class="badge text-bg-success px-2 py-1">Disponible</span>
+                                    <span th:if="${prod.stock > 0 and prod.stock <= 5}" class="badge text-bg-warning px-2 py-1">Stock bajo</span>
+                                    <span th:if="${prod.stock == 0}" class="badge text-bg-danger px-2 py-1">Agotado</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-primary me-1" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalProducto"
+                                            th:data-id="${prod.id}"
+                                            th:data-nombre="${prod.nombre}"
+                                            th:data-categoria="${prod.categoria}"
+                                            th:data-precio="${prod.precio}"
+                                            th:data-stock="${prod.stock}"
+                                            onclick="prepararEdicion(this)">
+                                        <i class="bi bi-pencil"></i>
                                     </button>
 
-                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#modalStock">
-
-                                        Stock
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-
-                            <tr>
-
-                                <td>Acondicionador</td>
-
-                                <td>Capilar</td>
-
-                                <td>S/ 28.00</td>
-
-                                <td>3</td>
-
-                                <td>
-                                    <span class="badge text-bg-warning">
-                                        Stock bajo
-                                    </span>
-                                </td>
-
-                                <td>
-
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditar">
-
-                                        Editar
-
-                                    </button>
-
-                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#modalStock">
-
-                                        Stock
-
-                                    </button>
-
-                                </td>
-                            </tr>
-
-
-                            <tr>
-
-                                <td>Tinte Profesional</td>
-
-                                <td>Coloración</td>
-
-                                <td>S/ 20.00</td>
-
-                                <td>0</td>
-
-                                <td>
-                                    <span class="badge text-bg-danger">
-                                        Agotado
-                                    </span>
-                                </td>
-
-                                <td>
-
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditar">
-
-                                        Editar
-
-                                    </button>
-
-                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#modalStock">
-
-                                        Stock
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-
-                            <tr>
-
-                                <td>Mascarilla Capilar</td>
-
-                                <td>Tratamiento</td>
-
-                                <td>S/ 42.00</td>
-
-                                <td>8</td>
-
-                                <td>
-                                    <span class="badge text-bg-success">
-                                        Disponible
-                                    </span>
-                                </td>
-
-                                <td>
-
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditar">
-
-                                        Editar
-
-                                    </button>
-
-                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#modalStock">
-
-                                        Stock
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-danger" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarProducto"
+                                            th:data-id="${prod.id}"
+                                            th:data-nombre="${prod.nombre}"
+                                            onclick="prepararEliminacion(this)">
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -355,262 +101,129 @@
         </div>
     </main>
 
-    <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalProductoLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalProductoLabel">
-                        Registrar nuevo producto
-                    </h5>
-
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">
-                    </button>
+    <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header modal-header-custom py-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-box-seam fs-5" id="iconoModal"></i>
+                        <h5 class="modal-title fw-bold fs-6 mb-0" id="modalTitulo">Registrar Producto</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form>
-                    <div class="modal-body">
+                <form th:action="@{/inventario/guardar}" method="post">
+                    <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label for="nombreProducto" class="form-label">
-                                Nombre del producto
-                            </label>
-
-                            <input type="text" class="form-control" id="nombreProducto"
-                                placeholder="Ej. Shampoo Profesional" required>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label for="categoriaProducto" class="form-label">
-                                Categoría
-                            </label>
-
-                            <select class="form-select" id="categoriaProducto" required>
-
-                                <option value="" selected disabled>
-                                    Seleccionar categoría
-                                </option>
-
-                                <option>Capilar</option>
-                                <option>Coloración</option>
-                                <option>Tratamiento</option>
-                                <option>Otros</option>
-
-                            </select>
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label for="precioProducto" class="form-label">
-                                    Precio
-                                </label>
-
-                                <input type="number" class="form-control" id="precioProducto" placeholder="0.00" min="0"
-                                    step="0.01" required>
-
+                            <label class="form-label fw-semibold text-secondary small">Código del Producto</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted"><i class="bi bi-upc-scan"></i></span>
+                                <input type="text" class="form-control" id="campoId" name="id" placeholder="Ej. PRD-06" required>
                             </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label for="stockProducto" class="form-label">
-                                    Stock inicial
-                                </label>
-
-                                <input type="number" class="form-control" id="stockProducto" placeholder="0" min="0"
-                                    required>
-
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary small">Nombre del Producto</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted"><i class="bi bi-tag"></i></span>
+                                <input type="text" class="form-control" id="campoNombre" name="nombre" placeholder="Ej. Cera Fijadora" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary small">Categoría</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted"><i class="bi bi-grid"></i></span>
+                                <select class="form-select" id="campoCategoria" name="categoria" required>
+                                    <option value="Capilar">Capilar</option>
+                                    <option value="Tratamiento">Tratamiento</option>
+                                    <option value="Coloración">Coloración</option>
+                                    <option value="Insumos">Insumos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary small">Precio Unitario</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted fw-bold">S/</span>
+                                    <input type="number" step="0.01" class="form-control" id="campoPrecio" name="precio" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary small">Stock Disponible</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-boxes"></i></span>
+                                    <input type="number" class="form-control" id="campoStock" name="stock" placeholder="0" required>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
-                    <div class="modal-footer">
-
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-
-                            Cancelar
-
-                        </button>
-
-                        <button type="submit" class="btn btn-primary">
-                            Guardar producto
-                        </button>
-
+                    <div class="modal-footer bg-light px-4 py-3 border-0">
+                        <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark px-4 fw-semibold" id="btnGuardar">Guardar Producto</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalEditar" tabindex="-1">
-
-        <div class="modal-dialog">
-
-            <div class="modal-content">
-
-                <div class="modal-header bg-primary text-white">
-
-                    <h5 class="modal-title">
-                        Editar producto
-                    </h5>
-
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    </button>
-
+    <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow text-center p-3">
+                <div class="modal-body pb-2">
+                    <div class="text-danger mb-3">
+                        <i class="bi bi-exclamation-triangle display-4"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">¿Eliminar producto?</h5>
+                    <p class="text-muted small mb-3">
+                        Estás a punto de quitar <span class="fw-bold text-dark" id="textoEliminarNombre"></span> del inventario. Esta acción no se puede deshacer.
+                    </p>
                 </div>
-
-
-                <div class="modal-body">
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Nombre del producto
-                        </label>
-
-                        <input type="text" class="form-control" value="Shampoo Profesional">
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Categoría
-                        </label>
-
-                        <select class="form-select">
-
-                            <option selected>
-                                Capilar
-                            </option>
-
-                            <option>
-                                Coloración
-                            </option>
-
-                            <option>
-                                Tratamiento
-                            </option>
-
-                            <option>
-                                Otros
-                            </option>
-
-                        </select>
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Precio
-                        </label>
-
-                        <input type="number" class="form-control" value="35.00" step="0.01">
-
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-
-                        Cancelar
-
-                    </button>
-
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-
-                        Guardar cambios
-                    </button>
+                <div class="d-flex justify-content-center gap-2 pb-2">
+                    <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
+                    <a href="#" id="enlaceConfirmarEliminar" class="btn btn-danger px-3 fw-semibold">Eliminar</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalStock" tabindex="-1">
+    <script>
+        function prepararNuevo() {
+            document.getElementById('modalTitulo').textContent = 'Registrar Producto';
+            document.getElementById('iconoModal').className = 'bi bi-plus-circle fs-5';
+            document.getElementById('btnGuardar').textContent = 'Registrar Producto';
+            
+            const campoId = document.getElementById('campoId');
+            campoId.value = '';
+            campoId.removeAttribute('readonly');
+            
+            document.getElementById('campoNombre').value = '';
+            document.getElementById('campoCategoria').value = 'Capilar';
+            document.getElementById('campoPrecio').value = '';
+            document.getElementById('campoStock').value = '';
+        }
 
-        <div class="modal-dialog modal-sm">
+        function prepararEdicion(boton) {
+            document.getElementById('modalTitulo').textContent = 'Editar Producto';
+            document.getElementById('iconoModal').className = 'bi bi-pencil-square fs-5';
+            document.getElementById('btnGuardar').textContent = 'Guardar Cambios';
 
-            <div class="modal-content">
+            const campoId = document.getElementById('campoId');
+            campoId.value = boton.getAttribute('data-id');
+            campoId.setAttribute('readonly', true);
 
-                <div class="modal-header bg-warning">
+            document.getElementById('campoNombre').value = boton.getAttribute('data-nombre');
+            document.getElementById('campoCategoria').value = boton.getAttribute('data-categoria');
+            document.getElementById('campoPrecio').value = boton.getAttribute('data-precio');
+            document.getElementById('campoStock').value = boton.getAttribute('data-stock');
+        }
 
-                    <h5 class="modal-title">
-                        Gestionar Stock
-                    </h5>
+        function prepararEliminacion(boton) {
+            const id = boton.getAttribute('data-id');
+            const nombre = boton.getAttribute('data-nombre');
+            document.getElementById('textoEliminarNombre').textContent = `"${nombre}" (${id})`;
+            document.getElementById('enlaceConfirmarEliminar').href = `/inventario/eliminar/${id}`;
+        }
+    </script>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    </button>
-
-                </div>
-
-
-                <div class="modal-body">
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Producto
-                        </label>
-
-                        <input type="text" class="form-control" value="Shampoo Profesional" readonly>
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Stock actual
-                        </label>
-
-                        <input type="number" class="form-control" value="15" readonly>
-
-                    </div>
-
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Cantidad
-                        </label>
-
-                        <input type="number" class="form-control" value="1" min="1">
-
-                    </div>
-
-                    <div class="d-grid gap-2">
-
-                        <button type="button" class="btn btn-success">
-
-                            + Aumentar stock
-
-                        </button>
-                        <button type="button" class="btn btn-danger">
-
-                            - Disminuir stock
-
-                        </button>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-
-                        Cerrar
-
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
-        </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
