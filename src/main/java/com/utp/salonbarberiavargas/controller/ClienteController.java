@@ -15,7 +15,7 @@ import java.util.List;
 public class ClienteController {
 
     private static List<Cliente> clientes = new ArrayList<>();
-    private static int contadorId = 4; 
+    private static int contadorId = 4;
 
     static {
         clientes.add(new Cliente("#001", "Juan Pérez", "987654321", "15/10/2023"));
@@ -65,5 +65,10 @@ public class ClienteController {
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login/login";
+    }
+
+    @GetMapping({ "/", "/index" })
+    public String mostrarIndex() {
+        return "index"; // Carga la plantilla src/main/resources/templates/index.html
     }
 }
