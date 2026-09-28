@@ -13,41 +13,7 @@
 
 <body class="bg-body-tertiary">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold" href="index.html">
-                Barbería Vargas
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fw-semibold" href="citas.html">Citas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="clientes.html">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="servicios.html">Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="inventario.html">Inventario</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-warning fw-bold" href="ventas.html">Nueva Venta</a>
-                    </li>
-                </ul>
-                <div class="text-white align-items-center">
-                    <span>Usuario: Admin Vargas</span>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="~{layout :: navbar}"></nav>
 
     <main class="container-fluid px-lg-5 my-4">
 
@@ -55,15 +21,21 @@
             <div>
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill">Módulo Agenda</span>
-                    <span class="text-secondary small"><i class="bi bi-calendar3 me-1"></i> Semana 35</span>
+                    <span class="text-secondary small"><i class="bi bi-calendar3 me-1"></i> Semana <span th:text="${semanaNumero}">35</span></span>
                 </div>
                 <h2 class="fw-bold text-dark mb-0">Control y Gestión de Citas</h2>
             </div>
             <div class="d-flex align-items-center gap-2 flex-wrap">
                 <div class="btn-group shadow-xs" role="group">
-                    <button type="button" class="btn btn-outline-secondary px-3"><i class="bi bi-chevron-left"></i></button>
-                    <button type="button" class="btn btn-outline-secondary fw-semibold px-3 active">Hoy</button>
-                    <button type="button" class="btn btn-outline-secondary px-3"><i class="bi bi-chevron-right"></i></button>
+                    <a th:href="@{/citas(offset=${offset - 1})}" class="btn btn-outline-secondary px-3" title="Semana anterior">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                    <a th:href="@{/citas(offset=0)}" th:class="${offset == 0 ? 'btn btn-outline-secondary fw-semibold px-3 active' : 'btn btn-outline-secondary fw-semibold px-3'}" title="Semana actual">
+                        Hoy
+                    </a>
+                    <a th:href="@{/citas(offset=${offset + 1})}" class="btn btn-outline-secondary px-3" title="Semana siguiente">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
                 </div>
                 <button class="btn btn-primary px-4 py-2 rounded-pill shadow-sm fw-semibold d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalNuevaCita">
                     <i class="bi bi-plus-circle-fill"></i> Nueva Cita
@@ -77,7 +49,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <span class="text-muted small fw-medium">Citas Programadas</span>
-                            <h2 class="fw-bold text-dark my-1">12</h2>
+                            <h2 class="fw-bold text-dark my-1" th:text="${citasProgramadas}">12</h2>
                         </div>
                         <div class="bg-primary-subtle text-primary rounded-circle p-2 px-3 fs-5">
                             <i class="bi bi-calendar-check"></i>
@@ -94,7 +66,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <span class="text-muted small fw-medium">Atendidas Hoy</span>
-                            <h2 class="fw-bold text-dark my-1">5</h2>
+                            <h2 class="fw-bold text-dark my-1" th:text="${citasAtendidas}">5</h2>
                         </div>
                         <div class="bg-success-subtle text-success rounded-circle p-2 px-3 fs-5">
                             <i class="bi bi-check2-circle"></i>
@@ -111,7 +83,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <span class="text-muted small fw-medium">Pendientes / Espera</span>
-                            <h2 class="fw-bold text-dark my-1">3</h2>
+                            <h2 class="fw-bold text-dark my-1" th:text="${citasPendientes}">3</h2>
                         </div>
                         <div class="bg-warning-subtle text-warning-emphasis rounded-circle p-2 px-3 fs-5">
                             <i class="bi bi-hourglass-split"></i>
@@ -128,11 +100,11 @@
             <div class="card-header bg-dark text-white py-3 px-4">
                 <div class="row text-center fw-semibold d-none d-lg-flex align-items-center">
                     <div class="col-lg-2 text-start text-secondary"><i class="bi bi-clock me-1"></i> Horario</div>
-                    <div class="col-lg-2">Lunes 31 <small class="text-secondary d-block fw-normal">Agosto</small></div>
-                    <div class="col-lg-2">Martes 01 <small class="text-secondary d-block fw-normal">Septiembre</small></div>
-                    <div class="col-lg-2">Miércoles 02 <small class="text-secondary d-block fw-normal">Septiembre</small></div>
-                    <div class="col-lg-2">Jueves 03 <small class="text-secondary d-block fw-normal">Septiembre</small></div>
-                    <div class="col-lg-2">Viernes 04 <small class="text-secondary d-block fw-normal">Septiembre</small></div>
+                    <div class="col-lg-2">Lunes <span th:text="${diaLunesNum}">31</span> <small class="text-secondary d-block fw-normal" th:text="${diaLunesMes}">Agosto</small></div>
+                    <div class="col-lg-2">Martes <span th:text="${diaMartesNum}">01</span> <small class="text-secondary d-block fw-normal" th:text="${diaMartesMes}">Septiembre</small></div>
+                    <div class="col-lg-2">Miércoles <span th:text="${diaMiercolesNum}">02</span> <small class="text-secondary d-block fw-normal" th:text="${diaMiercolesMes}">Septiembre</small></div>
+                    <div class="col-lg-2">Jueves <span th:text="${diaJuevesNum}">03</span> <small class="text-secondary d-block fw-normal" th:text="${diaJuevesMes}">Septiembre</small></div>
+                    <div class="col-lg-2">Viernes <span th:text="${diaViernesNum}">04</span> <small class="text-secondary d-block fw-normal" th:text="${diaViernesMes}">Septiembre</small></div>
                 </div>
                 <div class="d-lg-none text-center fw-bold">Agenda de Turnos Semanales</div>
             </div>
@@ -145,43 +117,75 @@
                     </div>
                     
                     <div class="col-12 col-lg-2">
-                        <div class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                        <div th:if="${slotLunes9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-primary rounded-pill small">Confirmada</span>
-                                <span class="fw-bold text-primary small">S/ 25.00</span>
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotLunes9.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotLunes9.precio}">S/ 25.00</span>
                             </div>
-                            <h6 class="fw-bold text-dark mt-2 mb-0">Juan Pérez</h6>
-                            <small class="text-muted"><i class="bi bi-scissors"></i> Corte Fade</small>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotLunes9.nombreCliente}">Juan Pérez</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotLunes9.nombreServicio}">Corte Fade</span></small>
                         </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
+                        <div th:if="${slotLunes9 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaLunes}" data-hora="09:00" style="cursor: pointer;" title="Agendar en este horario">
                             <i class="bi bi-plus-lg opacity-50"></i>
                             <span>Libre</span>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="card border-0 border-start border-4 border-success shadow-xs bg-success-subtle p-2 rounded-3">
+                        <div th:if="${slotMartes9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-success rounded-pill small">En Curso</span>
-                                <span class="fw-bold text-success small">S/ 20.00</span>
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotMartes9.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotMartes9.precio}">S/ 25.00</span>
                             </div>
-                            <h6 class="fw-bold text-dark mt-2 mb-0">Carlos Ruiz</h6>
-                            <small class="text-muted"><i class="bi bi-magic"></i> Barba Spa</small>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotMartes9.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotMartes9.nombreServicio}">Servicio</span></small>
                         </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
+                        <div th:if="${slotMartes9 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaMartes}" data-hora="09:00" style="cursor: pointer;" title="Agendar en este horario">
                             <i class="bi bi-plus-lg opacity-50"></i>
                             <span>Libre</span>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
+                        <div th:if="${slotMiercoles9 != null}" class="card border-0 border-start border-4 border-success shadow-xs bg-success-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success rounded-pill small" th:text="${slotMiercoles9.estadoCita}">En Curso</span>
+                                <span class="fw-bold text-success small" th:text="'S/ ' + ${slotMiercoles9.precio}">S/ 20.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotMiercoles9.nombreCliente}">Carlos Ruiz</h6>
+                            <small class="text-muted"><i class="bi bi-magic"></i> <span th:text="${slotMiercoles9.nombreServicio}">Barba Spa</span></small>
+                        </div>
+                        <div th:if="${slotMiercoles9 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaMiercoles}" data-hora="09:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2">
+                        <div th:if="${slotJueves9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotJueves9.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotJueves9.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotJueves9.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotJueves9.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotJueves9 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaJueves}" data-hora="09:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2">
+                        <div th:if="${slotViernes9 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotViernes9.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotViernes9.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotViernes9.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotViernes9.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotViernes9 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaViernes}" data-hora="09:00" style="cursor: pointer;" title="Agendar en este horario">
                             <i class="bi bi-plus-lg opacity-50"></i>
                             <span>Libre</span>
                         </div>
@@ -194,43 +198,75 @@
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
+                        <div th:if="${slotLunes11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotLunes11.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotLunes11.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotLunes11.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotLunes11.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotLunes11 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaLunes}" data-hora="11:00" style="cursor: pointer;" title="Agendar en este horario">
                             <i class="bi bi-plus-lg opacity-50"></i>
                             <span>Libre</span>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="card border-0 border-start border-4 border-warning shadow-xs bg-warning-subtle p-2 rounded-3">
+                        <div th:if="${slotMartes11 != null}" class="card border-0 border-start border-4 border-warning shadow-xs bg-warning-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-warning text-dark rounded-pill small">Pendiente</span>
-                                <span class="fw-bold text-dark small">S/ 40.00</span>
+                                <span class="badge bg-warning text-dark rounded-pill small" th:text="${slotMartes11.estadoCita}">Pendiente</span>
+                                <span class="fw-bold text-dark small" th:text="'S/ ' + ${slotMartes11.precio}">S/ 40.00</span>
                             </div>
-                            <h6 class="fw-bold text-dark mt-2 mb-0">Marcos Lima</h6>
-                            <small class="text-muted"><i class="bi bi-gem"></i> Combo VIP</small>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotMartes11.nombreCliente}">Marcos Lima</h6>
+                            <small class="text-muted"><i class="bi bi-gem"></i> <span th:text="${slotMartes11.nombreServicio}">Combo VIP</span></small>
                         </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
+                        <div th:if="${slotMartes11 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaMartes}" data-hora="11:00" style="cursor: pointer;" title="Agendar en este horario">
                             <i class="bi bi-plus-lg opacity-50"></i>
                             <span>Libre</span>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                        <div th:if="${slotMiercoles11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-primary rounded-pill small">Confirmada</span>
-                                <span class="fw-bold text-primary small">S/ 25.00</span>
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotMiercoles11.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotMiercoles11.precio}">S/ 25.00</span>
                             </div>
-                            <h6 class="fw-bold text-dark mt-2 mb-0">David Solís</h6>
-                            <small class="text-muted"><i class="bi bi-scissors"></i> Corte Clásico</small>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotMiercoles11.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotMiercoles11.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotMiercoles11 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaMiercoles}" data-hora="11:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
+                        <div th:if="${slotJueves11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotJueves11.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotJueves11.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotJueves11.nombreCliente}">David Solís</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotJueves11.nombreServicio}">Corte Clásico</span></small>
+                        </div>
+                        <div th:if="${slotJueves11 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaJueves}" data-hora="11:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2">
+                        <div th:if="${slotViernes11 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotViernes11.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotViernes11.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotViernes11.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotViernes11.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotViernes11 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaViernes}" data-hora="11:00" style="cursor: pointer;" title="Agendar en este horario">
                             <i class="bi bi-plus-lg opacity-50"></i>
                             <span>Libre</span>
                         </div>
@@ -243,45 +279,77 @@
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="card border-0 border-start border-4 border-info shadow-xs bg-info-subtle p-2 rounded-3">
+                        <div th:if="${slotLunes15 != null}" class="card border-0 border-start border-4 border-info shadow-xs bg-info-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-info text-dark rounded-pill small">Tinte</span>
-                                <span class="fw-bold text-info-emphasis small">S/ 35.00</span>
+                                <span class="badge bg-info text-dark rounded-pill small" th:text="${slotLunes15.estadoCita}">Tinte</span>
+                                <span class="fw-bold text-info-emphasis small" th:text="'S/ ' + ${slotLunes15.precio}">S/ 35.00</span>
                             </div>
-                            <h6 class="fw-bold text-dark mt-2 mb-0">Luis Ramos</h6>
-                            <small class="text-muted"><i class="bi bi-brush"></i> Colorimetría</small>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotLunes15.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-brush"></i> <span th:text="${slotLunes15.nombreServicio}">Colorimetría</span></small>
                         </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
+                        <div th:if="${slotLunes15 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaLunes}" data-hora="15:00" style="cursor: pointer;" title="Agendar en este horario">
                             <i class="bi bi-plus-lg opacity-50"></i>
                             <span>Libre</span>
                         </div>
                     </div>
 
                     <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
-                            <i class="bi bi-plus-lg opacity-50"></i>
-                            <span>Libre</span>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <div class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center">
-                            <i class="bi bi-plus-lg opacity-50"></i>
-                            <span>Libre</span>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2">
-                        <div class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                        <div th:if="${slotMartes15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-primary rounded-pill small">Confirmada</span>
-                                <span class="fw-bold text-primary small">S/ 25.00</span>
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotMartes15.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotMartes15.precio}">S/ 25.00</span>
                             </div>
-                            <h6 class="fw-bold text-dark mt-2 mb-0">Renato Paz</h6>
-                            <small class="text-muted"><i class="bi bi-scissors"></i> Fade Completo</small>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotMartes15.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotMartes15.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotMartes15 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaMartes}" data-hora="15:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2">
+                        <div th:if="${slotMiercoles15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotMiercoles15.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotMiercoles15.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotMiercoles15.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotMiercoles15.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotMiercoles15 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaMiercoles}" data-hora="15:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2">
+                        <div th:if="${slotJueves15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotJueves15.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotJueves15.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotJueves15.nombreCliente}">Cliente</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotJueves15.nombreServicio}">Servicio</span></small>
+                        </div>
+                        <div th:if="${slotJueves15 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaJueves}" data-hora="15:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2">
+                        <div th:if="${slotViernes15 != null}" class="card border-0 border-start border-4 border-primary shadow-xs bg-primary-subtle p-2 rounded-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-primary rounded-pill small" th:text="${slotViernes15.estadoCita}">Confirmada</span>
+                                <span class="fw-bold text-primary small" th:text="'S/ ' + ${slotViernes15.precio}">S/ 25.00</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mt-2 mb-0" th:text="${slotViernes15.nombreCliente}">Renato Paz</h6>
+                            <small class="text-muted"><i class="bi bi-scissors"></i> <span th:text="${slotViernes15.nombreServicio}">Fade Completo</span></small>
+                        </div>
+                        <div th:if="${slotViernes15 == null}" class="border border-dashed border-2 rounded-3 p-3 text-center text-muted small bg-light-subtle d-flex flex-column align-items-center justify-content-center slot-libre" role="button" data-bs-toggle="modal" data-bs-target="#modalNuevaCita" th:data-fecha="${fechaViernes}" data-hora="15:00" style="cursor: pointer;" title="Agendar en este horario">
+                            <i class="bi bi-plus-lg opacity-50"></i>
+                            <span>Libre</span>
                         </div>
                     </div>
                 </div>
@@ -291,7 +359,7 @@
         <section class="card shadow-sm border-0 rounded-4 p-4 bg-white mb-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold mb-0 text-dark">Historial Detallado de Turnos</h5>
-                <span class="text-muted small">Total: 3 registros</span>
+                <span class="text-muted small">Total: <span th:text="${#lists.size(listaCitas)}">3</span> registros</span>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -307,40 +375,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span class="badge bg-dark-subtle text-dark-emphasis">#CT-101</span></td>
-                            <td class="fw-semibold">Juan Pérez</td>
-                            <td>Corte Fade</td>
-                            <td>31/08/2026</td>
-                            <td>09:00 AM</td>
-                            <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Confirmada</span></td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-light border rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#modalEditarCita"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalEliminarCita"><i class="bi bi-trash"></i></button>
+                        <tr th:each="cita : ${listaCitas}">
+                            <td><span class="badge bg-dark-subtle text-dark-emphasis" th:text="${cita.idCita}">#CT-101</span></td>
+                            <td class="fw-semibold" th:text="${cita.nombreCliente}">Juan Pérez</td>
+                            <td th:text="${cita.nombreServicio}">Corte Fade</td>
+                            <td th:text="${cita.fecha}">2026-09-21</td>
+                            <td th:text="${cita.hora}">09:00</td>
+                            <td>
+                                <span th:if="${cita.estadoCita == 'Confirmada'}" class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
+                                <span th:if="${cita.estadoCita == 'En Curso' or cita.estadoCita == 'Atendida'}" class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
+                                <span th:if="${cita.estadoCita == 'Pendiente'}" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
+                                <span th:if="${cita.estadoCita == 'Cancelada'}" class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill" th:text="${cita.estadoCita}"></span>
                             </td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge bg-dark-subtle text-dark-emphasis">#CT-102</span></td>
-                            <td class="fw-semibold">Carlos Ruiz</td>
-                            <td>Barba Spa</td>
-                            <td>02/09/2026</td>
-                            <td>09:00 AM</td>
-                            <td><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">En Curso</span></td>
                             <td class="text-end">
-                                <button class="btn btn-sm btn-light border rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#modalEditarCita"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalEliminarCita"><i class="bi bi-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="badge bg-dark-subtle text-dark-emphasis">#CT-103</span></td>
-                            <td class="fw-semibold">Marcos Lima</td>
-                            <td>Combo VIP</td>
-                            <td>01/09/2026</td>
-                            <td>11:00 AM</td>
-                            <td><span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill">Pendiente</span></td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-light border rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#modalEditarCita"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalEliminarCita"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-light border rounded-pill px-3 me-1 btn-edit-cita"
+                                        th:data-id="${cita.idCita}"
+                                        th:data-nombre="${cita.nombreCliente}"
+                                        th:data-telefono="${cita.telefono}"
+                                        th:data-servicio="${cita.nombreServicio}"
+                                        th:data-fecha="${cita.fecha}"
+                                        th:data-hora="${cita.hora}"
+                                        th:data-estado="${cita.estadoCita}"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalEditarCita"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3 btn-delete-cita" 
+                                        th:data-id="${cita.idCita}"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalEliminarCita"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -361,12 +422,13 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form>
+                    <form th:action="@{/citas/agregar}" method="post">
+                        <input type="hidden" name="offset" th:value="${offset}">
                         <div class="mb-3">
                             <label for="clienteNombre" class="form-label fw-semibold small text-muted">Nombre del Cliente</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
-                                <input type="text" class="form-control" id="clienteNombre" placeholder="Ej. Roberto Sánchez" required>
+                                <input type="text" class="form-control" id="clienteNombre" name="nombreCliente" placeholder="Ej. Roberto Sánchez" required>
                             </div>
                         </div>
 
@@ -374,33 +436,36 @@
                             <label for="clienteTel" class="form-label fw-semibold small text-muted">Teléfono / WhatsApp</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
-                                <input type="tel" class="form-control" id="clienteTel" placeholder="Ej. 987654321" required>
+                                <input type="tel" class="form-control" id="clienteTel" name="telefono" placeholder="Ej. 987654321" required>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="selectServicio" class="form-label fw-semibold small text-muted">Servicio</label>
-                            <select class="form-select" id="selectServicio" required>
+                            <select class="form-select" id="selectServicio" name="nombreServicio" required>
                                 <option selected disabled value="">Seleccionar...</option>
-                                <option value="1">Corte Fade - S/ 25.00</option>
-                                <option value="2">Barba Spa - S/ 20.00</option>
-                                <option value="3">Combo VIP - S/ 40.00</option>
+                                <option value="Corte Fade">Corte Fade - S/ 25.00</option>
+                                <option value="Barba Spa">Barba Spa - S/ 20.00</option>
+                                <option value="Combo VIP">Combo VIP - S/ 40.00</option>
+                                <option value="Colorimetría">Colorimetría - S/ 35.00</option>
+                                <option value="Corte Clásico">Corte Clásico - S/ 25.00</option>
+                                <option value="Fade Completo">Fade Completo - S/ 25.00</option>
                             </select>
                         </div>
 
                         <div class="row g-2 mb-4">
                             <div class="col-6">
                                 <label for="fechaCita" class="form-label fw-semibold small text-muted">Fecha</label>
-                                <input type="date" class="form-control" id="fechaCita" required>
+                                <input type="date" class="form-control" id="fechaCita" name="fecha" th:value="${fechaLunes}" required>
                             </div>
                             <div class="col-6">
                                 <label for="horaCita" class="form-label fw-semibold small text-muted">Hora</label>
-                                <input type="time" class="form-control" id="horaCita" required>
+                                <input type="time" class="form-control" id="horaCita" name="hora" value="09:00" required>
                             </div>
                         </div>
 
                         <div class="d-grid">
-                            <button type="button" class="btn btn-primary btn-lg rounded-pill fw-semibold" data-bs-dismiss="modal">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">
                                 Confirmar y Guardar
                             </button>
                         </div>
@@ -421,31 +486,50 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form>
+                    <form th:action="@{/citas/editar}" method="post">
+                        <input type="hidden" name="offset" th:value="${offset}">
+                        <input type="hidden" id="editIdCita" name="idCita">
                         <div class="mb-3">
                             <label for="editClienteNombre" class="form-label fw-semibold small text-muted">Nombre del Cliente</label>
-                            <input type="text" class="form-control" id="editClienteNombre" value="Juan Pérez" required>
+                            <input type="text" class="form-control" id="editClienteNombre" name="nombreCliente" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editClienteTel" class="form-label fw-semibold small text-muted">Teléfono / WhatsApp</label>
+                            <input type="tel" class="form-control" id="editClienteTel" name="telefono">
                         </div>
                         <div class="mb-3">
                             <label for="editSelectServicio" class="form-label fw-semibold small text-muted">Servicio</label>
-                            <select class="form-select" id="editSelectServicio" required>
-                                <option value="1" selected>Corte Fade - S/ 25.00</option>
-                                <option value="2">Barba Spa - S/ 20.00</option>
-                                <option value="3">Combo VIP - S/ 40.00</option>
+                            <select class="form-select" id="editSelectServicio" name="nombreServicio" required>
+                                <option value="Corte Fade">Corte Fade - S/ 25.00</option>
+                                <option value="Barba Spa">Barba Spa - S/ 20.00</option>
+                                <option value="Combo VIP">Combo VIP - S/ 40.00</option>
+                                <option value="Colorimetría">Colorimetría - S/ 35.00</option>
+                                <option value="Corte Clásico">Corte Clásico - S/ 25.00</option>
+                                <option value="Fade Completo">Fade Completo - S/ 25.00</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEstadoCita" class="form-label fw-semibold small text-muted">Estado del Turno</label>
+                            <select class="form-select" id="editEstadoCita" name="estadoCita" required>
+                                <option value="Confirmada">Confirmada</option>
+                                <option value="En Curso">En Curso</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Atendida">Atendida</option>
+                                <option value="Cancelada">Cancelada</option>
                             </select>
                         </div>
                         <div class="row g-2 mb-4">
                             <div class="col-6">
                                 <label for="editFechaCita" class="form-label fw-semibold small text-muted">Fecha</label>
-                                <input type="date" class="form-control" id="editFechaCita" value="2026-08-31" required>
+                                <input type="date" class="form-control" id="editFechaCita" name="fecha" required>
                             </div>
                             <div class="col-6">
                                 <label for="editHoraCita" class="form-label fw-semibold small text-muted">Hora</label>
-                                <input type="time" class="form-control" id="editHoraCita" value="09:00" required>
+                                <input type="time" class="form-control" id="editHoraCita" name="hora" required>
                             </div>
                         </div>
                         <div class="d-grid">
-                            <button type="button" class="btn btn-primary btn-lg rounded-pill fw-semibold" data-bs-dismiss="modal">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">
                                 Guardar Cambios
                             </button>
                         </div>
@@ -466,14 +550,17 @@
                         <i class="bi bi-exclamation-circle"></i>
                     </div>
                     <h5 class="fw-bold text-dark" id="modalEliminarLabel">¿Estás seguro de eliminar este turno?</h5>
-                    <p class="text-muted small">Esta acción no se puede deshacer y liberará el horario seleccionado.</p>
-                    <div class="d-flex justify-content-center gap-2 mt-4">
-                        <button type="button" class="btn btn-light rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-danger rounded-pill px-4 fw-semibold" id="btnConfirmDelete">
-                            <span class="spinner-border spinner-border-sm d-none me-1" role="status" aria-hidden="true"></span>
-                            Sí, eliminar
-                        </button>
-                    </div>
+                    <p class="text-muted small">Esta acción eliminará el turno y liberará el horario en la agenda.</p>
+                    <form id="formEliminarCita" method="post" th:action="@{/citas/eliminar}">
+                        <input type="hidden" name="offset" th:value="${offset}">
+                        <input type="hidden" id="deleteIdCita" name="idCita">
+                        <div class="d-flex justify-content-center gap-2 mt-4">
+                            <button type="button" class="btn btn-light rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-semibold" id="btnConfirmDelete">
+                                Sí, eliminar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -484,21 +571,60 @@
         crossorigin="anonymous"></script>
 
     <script>
-        const btnConfirmDelete = document.getElementById('btnConfirmDelete');
-        const spinnerDelete = btnConfirmDelete.querySelector('.spinner-border');
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.slot-libre').forEach(function (slot) {
+                slot.addEventListener('click', function () {
+                    const f = this.getAttribute('data-fecha');
+                    const h = this.getAttribute('data-hora');
+                    if (f && document.getElementById('fechaCita')) {
+                        document.getElementById('fechaCita').value = f;
+                    }
+                    if (h && document.getElementById('horaCita')) {
+                        document.getElementById('horaCita').value = h;
+                    }
+                });
+            });
 
-        btnConfirmDelete.addEventListener('click', function () {
-            spinnerDelete.classList.remove('d-none');
-            btnConfirmDelete.setAttribute('disabled', 'true');
+            const modalEditar = document.getElementById('modalEditarCita');
+            if (modalEditar) {
+                modalEditar.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    if (button && button.classList.contains('btn-edit-cita')) {
+                        const id = button.getAttribute('data-id') || '';
+                        const nombre = button.getAttribute('data-nombre') || '';
+                        const telefono = button.getAttribute('data-telefono') || '';
+                        const servicio = button.getAttribute('data-servicio') || 'Corte Fade';
+                        const fecha = button.getAttribute('data-fecha') || '';
+                        const hora = button.getAttribute('data-hora') || '';
+                        const estado = button.getAttribute('data-estado') || 'Confirmada';
 
-            setTimeout(() => {
-                spinnerDelete.classList.add('d-none');
-                btnConfirmDelete.removeAttribute('disabled');
+                        document.getElementById('editIdCita').value = id;
+                        document.getElementById('editClienteNombre').value = nombre;
+                        const telInput = document.getElementById('editClienteTel');
+                        if (telInput) telInput.value = telefono;
+                        document.getElementById('editSelectServicio').value = servicio;
+                        document.getElementById('editFechaCita').value = fecha;
+                        document.getElementById('editHoraCita').value = hora;
+                        const estadoInput = document.getElementById('editEstadoCita');
+                        if (estadoInput) estadoInput.value = estado;
+                    }
+                });
+            }
 
-                const modalEl = document.getElementById('modalEliminarCita');
-                const modal = bootstrap.Modal.getInstance(modalEl);
-                modal.hide();
-            }, 1200); 
+            const modalEliminar = document.getElementById('modalEliminarCita');
+            if (modalEliminar) {
+                modalEliminar.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    if (button && button.classList.contains('btn-delete-cita')) {
+                        const id = button.getAttribute('data-id') || '';
+                        document.getElementById('deleteIdCita').value = id;
+                        const form = document.getElementById('formEliminarCita');
+                        if (form) {
+                            form.action = '/citas/eliminar/' + encodeURIComponent(id);
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>
