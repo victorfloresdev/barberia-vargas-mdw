@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ClienteController {
 
     private static List<Cliente> clientes = new ArrayList<>();
+    private static int contadorId = 4;
 
     static {
         clientes.add(new Cliente("#001", "Juan Pérez", "987654321", "15/10/2023"));
@@ -27,9 +29,16 @@ public class ClienteController {
         return "clientes/clientes";
     }
 
-    @GetMapping("/login")
-    public String mostrarLogin() {
-        return "login/login";
+    @PostMapping("/clientes/guardar")
+    public String guardarCliente(@ModelAttribute Cliente nuevoCliente) {
+        if (nuevoCliente.getId() == null || nuevoCliente.getId().isEmpty()) {
+            nuevoCliente.setId(String.format("#%03d", contadorId++));
+        }
+        if (nuevoCliente.getUltimaVisita() == null || nuevoCliente.getUltimaVisita().isEmpty()) {
+            nuevoCliente.setUltimaVisita("Hoy");
+        }
+        clientes.add(nuevoCliente);
+        return "redirect:/clientes";
     }
 
     @PostMapping("/clientes/actualizar")
@@ -38,10 +47,28 @@ public class ClienteController {
             if (c.getId().equals(clienteActualizado.getId())) {
                 c.setNombreCompleto(clienteActualizado.getNombreCompleto());
                 c.setTelefono(clienteActualizado.getTelefono());
-                c.setUltimaVisita(clienteActualizado.getUltimaVisita());
+                if (clienteActualizado.getUltimaVisita() != null && !clienteActualizado.getUltimaVisita().isEmpty()) {
+                    c.setUltimaVisita(clienteActualizado.getUltimaVisita());
+                }
                 break;
             }
         }
         return "redirect:/clientes";
+    }
+
+    @PostMapping("/clientes/eliminar")
+    public String eliminarCliente(@RequestParam("id") String id) {
+        clientes.removeIf(c -> c.getId().equals(id));
+        return "redirect:/clientes";
+    }
+
+    @GetMapping("/login")
+    public String mostrarLogin() {
+        return "login/login";
+    }
+
+    @GetMapping({ "/", "/index" })
+    public String mostrarIndex() {
+        return "index"; // Carga la plantilla src/main/resources/templates/index.html
     }
 }
