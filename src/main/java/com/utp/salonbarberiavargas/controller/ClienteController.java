@@ -67,8 +67,4 @@ public class ClienteController {
         return "login/login";
     }
 
-    @GetMapping({ "/", "/index" })
-    public String mostrarIndex() {
-        return "index"; // Carga la plantilla src/main/resources/templates/index.html
-    }
 }

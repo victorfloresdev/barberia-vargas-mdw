@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller 
 public class IndexController {
-    @GetMapping("/")
+    @GetMapping({ "/", "/index" })
     public String MostrarVistaIndex(Model model) {
         model.addAttribute("citasHoy", 8);
         model.addAttribute("citasPendientes", 2);
