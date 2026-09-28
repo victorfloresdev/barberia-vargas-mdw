@@ -20,10 +20,12 @@
                 <h1 class="fw-bold text-dark display-5">Catálogo de Servicios</h1>
                 <p class="text-muted fs-5 mb-0">Atención personalizada y servicios profesionales para tu cuidado personal</p>
             </div>
-            <button class="btn btn-primary rounded-pill fw-semibold" type="button" data-bs-toggle="modal" data-bs-target="#modalServicio">
+            <button class="btn btn-primary rounded-pill fw-semibold" type="button" data-bs-toggle="modal" data-bs-target="#modalAgregarServicio">
                 Agregar servicio
             </button>
         </header>
+
+        <div class="alert alert-success" role="alert" th:if="${mensajeReserva}" th:text="${mensajeReserva}"></div>
 
         <div class="row g-4 mb-5">
             <div class="col-12 col-md-6 col-lg-4" th:each="servicio : ${servicios}">
@@ -37,10 +39,11 @@
                         <h4 class="card-title fw-bold text-dark" th:text="${servicio.nombre_servicio}">Corte Clásico &amp; Fade</h4>
                         <p class="card-text text-muted flex-grow-1" th:text="${servicio.descripcion}">Descripción del servicio.</p>
                         <p class="small text-muted mb-0" th:text="${servicio.duracion_estimada} + ' min estimados'">40 min estimados</p>
-                        <button class="btn btn-outline-dark w-100 mt-3 rounded-pill fw-semibold" data-bs-toggle="modal" data-bs-target="#modalReserva">
+                        <button class="btn btn-outline-dark w-100 mt-3 rounded-pill fw-semibold" type="button" data-bs-toggle="modal" data-bs-target="#modalReserva"
+                            th:attr="data-id-servicio=${servicio.id_servicio},data-nombre-servicio=${servicio.nombre_servicio}">
                             Reservar Servicio
                         </button>
-                        <button class="btn btn-link btn-sm mt-2 text-muted" type="button" data-bs-toggle="modal" data-bs-target="#modalServicio"
+                        <button class="btn btn-link btn-sm mt-2 text-muted" type="button" data-bs-toggle="modal" data-bs-target="#modalEditarServicio"
                             th:attr="data-id=${servicio.id_servicio},data-nombre=${servicio.nombre_servicio},data-descripcion=${servicio.descripcion},data-duracion=${servicio.duracion_estimada},data-precio=${servicio.precio}">
                             Editar datos
                         </button>
@@ -74,38 +77,75 @@
         </section>
     </main>
 
-    <div class="modal fade" id="modalServicio" tabindex="-1" aria-labelledby="modalServicioLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAgregarServicio" tabindex="-1" aria-labelledby="modalAgregarServicioLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title fw-bold" id="modalServicioLabel">Agregar o editar servicio</h5>
+                    <h5 class="modal-title fw-bold" id="modalAgregarServicioLabel">Agregar servicio</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <form>
+                <form th:action="@{/servicios/agregar}" th:object="${nuevoServicio}" method="post">
                     <div class="modal-body">
-                        <input type="hidden" id="id_servicio" name="id_servicio">
                         <div class="mb-3">
                             <label for="nombre_servicio" class="form-label">Nombre del servicio</label>
-                            <input type="text" class="form-control" id="nombre_servicio" name="nombre_servicio" required>
+                            <input type="text" class="form-control" th:field="*{nombre_servicio}" required>
                         </div>
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                            <textarea class="form-control" th:field="*{descripcion}" rows="3" required></textarea>
                         </div>
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <label for="duracion_estimada" class="form-label">Duración (min)</label>
-                                <input type="number" class="form-control" id="duracion_estimada" name="duracion_estimada" min="1" required>
+                                <input type="number" class="form-control" th:field="*{duracion_estimada}" min="1" required>
                             </div>
                             <div class="col-sm-6">
                                 <label for="precio" class="form-label">Precio (S/)</label>
-                                <input type="number" class="form-control" id="precio" name="precio" min="0" step="0.01" required>
+                                <input type="number" class="form-control" th:field="*{precio}" min="0" step="0.01" required>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Guardar servicio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditarServicio" tabindex="-1" aria-labelledby="modalEditarServicioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="modalEditarServicioLabel">Editar servicio</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <form th:action="@{/servicios/editar}" th:object="${nuevoServicio}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" th:field="*{id_servicio}">
+                        <div class="mb-3">
+                            <label for="editar_nombre_servicio" class="form-label">Nombre del servicio</label>
+                            <input type="text" class="form-control" id="editar_nombre_servicio" th:field="*{nombre_servicio}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editar_descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="editar_descripcion" th:field="*{descripcion}" rows="3" required></textarea>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="editar_duracion_estimada" class="form-label">Duración (min)</label>
+                                <input type="number" class="form-control" id="editar_duracion_estimada" th:field="*{duracion_estimada}" min="1" required>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="editar_precio" class="form-label">Precio (S/)</label>
+                                <input type="number" class="form-control" id="editar_precio" th:field="*{precio}" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </form>
             </div>
@@ -119,25 +159,27 @@
                     <h5 class="modal-title fw-bold" id="modalLabel">Agendar Servicio</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body p-4">
-                    <form>
+                <form th:action="@{/servicios/reservar}" method="post">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="reservaIdServicio" name="id_servicio">
+                        <p class="fw-semibold" id="reservaNombreServicio"></p>
                         <div class="mb-3">
                             <label for="clienteNombre" class="form-label fw-semibold small text-muted">Nombre y Apellido</label>
-                            <input type="text" class="form-control" id="clienteNombre" placeholder="Ej. Juan Pérez" required>
+                            <input type="text" class="form-control" id="clienteNombre" name="clienteNombre" placeholder="Ej. Juan Pérez" required>
                         </div>
                         <div class="mb-3">
                             <label for="clienteTelefono" class="form-label fw-semibold small text-muted">Teléfono / WhatsApp</label>
-                            <input type="tel" class="form-control" id="clienteTelefono" placeholder="Ej. 987654321" required>
+                            <input type="tel" class="form-control" id="clienteTelefono" name="clienteTelefono" placeholder="Ej. 987654321" required>
                         </div>
                         <div class="mb-4">
                             <label for="fechaCita" class="form-label fw-semibold small text-muted">Fecha y Hora</label>
-                            <input type="datetime-local" class="form-control" id="fechaCita" required>
+                            <input type="datetime-local" class="form-control" id="fechaCita" name="fechaCita" required>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-primary btn-lg rounded-pill fw-semibold" data-bs-dismiss="modal">Confirmar Reserva</button>
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">Confirmar Reserva</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -146,15 +188,21 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
     <script>
-        const modalServicio = document.getElementById('modalServicio');
-        modalServicio.addEventListener('show.bs.modal', event => {
+        const modalEditarServicio = document.getElementById('modalEditarServicio');
+        modalEditarServicio.addEventListener('show.bs.modal', event => {
             const trigger = event.relatedTarget;
-            const fields = ['id', 'nombre', 'descripcion', 'duracion', 'precio'];
-            const inputs = ['id_servicio', 'nombre_servicio', 'descripcion', 'duracion_estimada', 'precio'];
+            document.getElementById('id_servicio').value = trigger.dataset.id;
+            document.getElementById('editar_nombre_servicio').value = trigger.dataset.nombre;
+            document.getElementById('editar_descripcion').value = trigger.dataset.descripcion;
+            document.getElementById('editar_duracion_estimada').value = trigger.dataset.duracion;
+            document.getElementById('editar_precio').value = trigger.dataset.precio;
+        });
 
-            inputs.forEach((input, index) => {
-                document.getElementById(input).value = trigger?.dataset[fields[index]] ?? '';
-            });
+        const modalReserva = document.getElementById('modalReserva');
+        modalReserva.addEventListener('show.bs.modal', event => {
+            const trigger = event.relatedTarget;
+            document.getElementById('reservaIdServicio').value = trigger.dataset.idServicio;
+            document.getElementById('reservaNombreServicio').textContent = trigger.dataset.nombreServicio;
         });
     </script>
 </body>
