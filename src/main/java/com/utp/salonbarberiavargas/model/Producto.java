@@ -1,6 +1,14 @@
-package com.utp.salonbarberiavargas.domain.inventario;
+package com.utp.salonbarberiavargas.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity 
 public class Producto {
+    @Id 
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private String id;
     private String nombre;
     private String categoria;

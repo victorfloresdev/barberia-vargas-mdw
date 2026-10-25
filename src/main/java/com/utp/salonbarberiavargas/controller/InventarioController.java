@@ -1,9 +1,10 @@
 package com.utp.salonbarberiavargas.controller;
 
-import com.utp.salonbarberiavargas.domain.inventario.Producto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import com.utp.salonbarberiavargas.model.Producto;
 
 import java.util.ArrayList;
 import java.util.List;

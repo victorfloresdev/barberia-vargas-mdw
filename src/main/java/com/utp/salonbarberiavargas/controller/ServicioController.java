@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.utp.salonbarberiavargas.domain.servicios.Servicio;
+import com.utp.salonbarberiavargas.model.Servicio;
 
 @Controller
 public class ServicioController {

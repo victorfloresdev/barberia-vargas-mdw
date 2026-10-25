@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.utp.salonbarberiavargas.domain.citas.Cita;
+import com.utp.salonbarberiavargas.model.Cita;
 
 @Controller
 public class CitaController {

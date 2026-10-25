@@ -1,6 +1,14 @@
-package com.utp.salonbarberiavargas.domain.servicios;
+package com.utp.salonbarberiavargas.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity 
 public class Servicio {
+    @Id 
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id_servicio;
     private String nombre_servicio;
     private String descripcion;

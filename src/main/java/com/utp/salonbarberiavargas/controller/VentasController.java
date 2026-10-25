@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.utp.salonbarberiavargas.domain.clientes.Cliente;
-import com.utp.salonbarberiavargas.domain.ventas.ItemVenta;
+import com.utp.salonbarberiavargas.model.Cliente;
+import com.utp.salonbarberiavargas.model.ItemVenta;
 
 @Controller
 public class VentasController {
