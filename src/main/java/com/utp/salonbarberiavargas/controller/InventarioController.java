@@ -15,13 +15,13 @@ public class InventarioController {
 
     private static final List<Producto> listaProductos = new ArrayList<>();
 
-    static {
-        listaProductos.add(new Producto("PRD-01", "Cera Pomada Fijación Mate", "Capilar", 35.00, 15));
-        listaProductos.add(new Producto("PRD-02", "Aceite Hidratante para Barba", "Tratamiento", 42.50, 4));
-        listaProductos.add(new Producto("PRD-03", "Tinte Negro Intenso Barber", "Coloración", 25.00, 0));
-        listaProductos.add(new Producto("PRD-04", "Shampoo Anticaída Fortificante", "Capilar", 38.00, 8));
-        listaProductos.add(new Producto("PRD-05", "Loción Aftershave Refrescante", "Tratamiento", 28.00, 2));
-    }
+    // static {
+    //     listaProductos.add(new Producto("PRD-01", "Cera Pomada Fijación Mate", "Capilar", 35.00, 15));
+    //     listaProductos.add(new Producto("PRD-02", "Aceite Hidratante para Barba", "Tratamiento", 42.50, 4));
+    //     listaProductos.add(new Producto("PRD-03", "Tinte Negro Intenso Barber", "Coloración", 25.00, 0));
+    //     listaProductos.add(new Producto("PRD-04", "Shampoo Anticaída Fortificante", "Capilar", 38.00, 8));
+    //     listaProductos.add(new Producto("PRD-05", "Loción Aftershave Refrescante", "Tratamiento", 28.00, 2));
+    // }
 
     @GetMapping
     public String listarInventario(Model model) {

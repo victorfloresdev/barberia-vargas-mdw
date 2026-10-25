@@ -19,8 +19,8 @@ public class VentasController {
     private List <ItemVenta> carrito = new ArrayList<>();
     private int contadorId = 1;
     private List<Cliente> clientesSelect = new ArrayList<Cliente>(Arrays.asList(
-        new Cliente("#001", "Juan Pérez", "987654321", "15/09/2026"),
-        new Cliente("#002", "Carlos Mendoza", "912345678", "20/09/2026")
+        // new Cliente("#001", "Juan Pérez", "987654321", "15/09/2026"),
+        // new Cliente("#002", "Carlos Mendoza", "912345678", "20/09/2026")
     ));
 
     @GetMapping("/ventas")

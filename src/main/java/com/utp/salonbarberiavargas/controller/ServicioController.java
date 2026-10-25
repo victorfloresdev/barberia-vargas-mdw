@@ -18,10 +18,10 @@ public class ServicioController {
     private int siguienteId = 5;
 
     public ServicioController() {
-        servicios.add(new Servicio(1, "Corte Clásico & Fade", "Asesoría de imagen, degradado, lavado capilar y peinado con cera mate.", 40, 25.00));
-        servicios.add(new Servicio(2, "Perfilado de Barba", "Toalla caliente, perfilado a navaja e hidratación con aceites.", 30, 20.00));
-        servicios.add(new Servicio(3, "Combo Vargas Deluxe", "Corte, perfilado de barba y exfoliación facial con vaporizador.", 60, 40.00));
-        servicios.add(new Servicio(4, "Tinte y Camuflaje de Canas", "Aplicación de tinte y acabado natural para disimular canas.", 45, 35.00));
+        // servicios.add(new Servicio(1, "Corte Clásico & Fade", "Asesoría de imagen, degradado, lavado capilar y peinado con cera mate.", 40, 25.00));
+        // servicios.add(new Servicio(2, "Perfilado de Barba", "Toalla caliente, perfilado a navaja e hidratación con aceites.", 30, 20.00));
+        // servicios.add(new Servicio(3, "Combo Vargas Deluxe", "Corte, perfilado de barba y exfoliación facial con vaporizador.", 60, 40.00));
+        // servicios.add(new Servicio(4, "Tinte y Camuflaje de Canas", "Aplicación de tinte y acabado natural para disimular canas.", 45, 35.00));
     }
 
     @GetMapping("/servicios")

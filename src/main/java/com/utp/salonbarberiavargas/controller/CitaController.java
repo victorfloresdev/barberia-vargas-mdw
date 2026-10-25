@@ -27,18 +27,18 @@ public class CitaController {
         LocalDate hoy = LocalDate.now();
         LocalDate lunes = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         
-        listaCitas.add(new Cita("#CT-101", "Juan Pérez", "987654321", "Corte Fade", lunes.toString(), "09:00", 25.0, "Confirmada"));
-        listaCitas.add(new Cita("#CT-102", "Marcos Lima", "998877665", "Combo VIP", lunes.plusDays(1).toString(), "11:00", 40.0, "Pendiente"));
-        listaCitas.add(new Cita("#CT-103", "Carlos Ruiz", "912345678", "Barba Spa", lunes.plusDays(2).toString(), "09:00", 20.0, "En Curso"));
-        listaCitas.add(new Cita("#CT-104", "David Solís", "945612378", "Corte Clásico", lunes.plusDays(3).toString(), "11:00", 25.0, "Confirmada"));
-        listaCitas.add(new Cita("#CT-105", "Luis Ramos", "923456789", "Colorimetría", lunes.plusDays(4).toString(), "15:00", 35.0, "Atendida"));
-        listaCitas.add(new Cita("#CT-106", "Renato Paz", "934567890", "Fade Completo", lunes.plusDays(4).toString(), "15:00", 25.0, "Cancelada"));
+        // listaCitas.add(new Cita("#CT-101", "Juan Pérez", "987654321", "Corte Fade", lunes.toString(), "09:00", 25.0, "Confirmada"));
+        // listaCitas.add(new Cita("#CT-102", "Marcos Lima", "998877665", "Combo VIP", lunes.plusDays(1).toString(), "11:00", 40.0, "Pendiente"));
+        // listaCitas.add(new Cita("#CT-103", "Carlos Ruiz", "912345678", "Barba Spa", lunes.plusDays(2).toString(), "09:00", 20.0, "En Curso"));
+        // listaCitas.add(new Cita("#CT-104", "David Solís", "945612378", "Corte Clásico", lunes.plusDays(3).toString(), "11:00", 25.0, "Confirmada"));
+        // listaCitas.add(new Cita("#CT-105", "Luis Ramos", "923456789", "Colorimetría", lunes.plusDays(4).toString(), "15:00", 35.0, "Atendida"));
+        // listaCitas.add(new Cita("#CT-106", "Renato Paz", "934567890", "Fade Completo", lunes.plusDays(4).toString(), "15:00", 25.0, "Cancelada"));
 
-        listaCitas.add(new Cita("#CT-107", "Roberto Sánchez", "966554433", "Corte Fade", hoy.toString(), "09:00", 25.0, "Confirmada"));
+        // listaCitas.add(new Cita("#CT-107", "Roberto Sánchez", "966554433", "Corte Fade", hoy.toString(), "09:00", 25.0, "Confirmada"));
 
         LocalDate lunesSig = lunes.plusWeeks(1);
-        listaCitas.add(new Cita("#CT-108", "Anderson Cruz", "955443322", "Corte Fade", lunesSig.toString(), "09:00", 25.0, "Confirmada"));
-        listaCitas.add(new Cita("#CT-109", "Mateo Silva", "944332211", "Barba Spa", lunesSig.plusDays(2).toString(), "11:00", 20.0, "Pendiente"));
+        // listaCitas.add(new Cita("#CT-108", "Anderson Cruz", "955443322", "Corte Fade", lunesSig.toString(), "09:00", 25.0, "Confirmada"));
+        // listaCitas.add(new Cita("#CT-109", "Mateo Silva", "944332211", "Barba Spa", lunesSig.plusDays(2).toString(), "11:00", 20.0, "Pendiente"));
     }
 
     private String obtenerNombreMes(int mes) {
