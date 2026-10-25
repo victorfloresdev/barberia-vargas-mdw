@@ -1,6 +1,7 @@
 package com.utp.salonbarberiavargas.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -37,12 +38,18 @@ public class Venta {
     @DecimalMin (value = "0.01", message = "El total debe ser mayor que cero")
     private Double total;
     @ManyToOne
-    @JoinColumn(name = "id_cliente")
+    @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
     @OneToMany (mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVenta> items;
 
     public Venta(){
+        this.fecha = LocalDateTime.now();
+        this.items = new ArrayList<>();
+    }
 
+    public void agregarItem(ItemVenta item) {
+        item.setVenta(this);
+        this.items.add(item);
     }
 }
