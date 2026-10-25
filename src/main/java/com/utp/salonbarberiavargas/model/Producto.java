@@ -6,18 +6,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity 
-@Table (name = "productos")
+@Entity
+@Table(name = "productos")
 public class Producto {
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String nombre;
     private String categoria;
     private double precio;
     private int stock;
 
-    public Producto() {}
+    public Producto() {
+    }
 
     public Producto(String id, String nombre, String categoria, double precio, int stock) {
         this.id = id;
