@@ -21,35 +21,34 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter 
+@Getter
 @Setter
 @Entity
 @Table(name = "ventas")
 public class Venta {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_venta")
     private Integer idVenta;
-    @NotNull (message = "La fecha no puede ser nula")
-    @PastOrPresent (message = "La fecha debe ser igual o anterior a la fecha actual")
+    @NotNull(message = "La fecha no puede ser nula")
+    @PastOrPresent(message = "La fecha debe ser igual o anterior a la fecha actual")
     private LocalDateTime fecha;
-    @NotNull (message = "El total no puede ser nulo")
-    @Positive (message = "El total debe ser un valor positivo")
-    @DecimalMin (value = "0.01", message = "El total debe ser mayor que cero")
+    @NotNull(message = "El total no puede ser nulo")
+    @Positive(message = "El total debe ser un valor positivo")
+    @DecimalMin(value = "0.01", message = "El total debe ser mayor que cero")
     private Double total;
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "id_cliente", nullable = true)
     private Cliente cliente;
-    @OneToMany (mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVenta> items;
 
-    public Venta(){
+    public Venta() {
         this.fecha = LocalDateTime.now();
         this.items = new ArrayList<>();
     }
 
     public void agregarItem(ItemVenta item) {
-        item.setVenta(this);
         this.items.add(item);
     }
 }
