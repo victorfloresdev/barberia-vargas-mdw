@@ -1,59 +1,36 @@
 package com.utp.salonbarberiavargas.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity 
-@Table (name = "clientes")
+@Entity
+@Table(name = "clientes")
+@Getter
+@Setter
+@NoArgsConstructor 
+@AllArgsConstructor 
 public class Cliente {
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private String id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_cliente") 
+    private Integer idCliente; 
+
+    @NotBlank(message = "El nombre completo es obligatorio")
+    @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres")
+    @Column(name = "nombre_completo") 
     private String nombreCompleto;
+
+    @NotBlank(message = "El teléfono es obligatorio")
+    @Pattern(regexp = "\\d{9}", message = "El teléfono debe tener 9 digitos")
     private String telefono;
+
+    @Column(name = "ultima_visita")
     private String ultimaVisita;
-
-    public Cliente() {}
-
-    public Cliente(String id, String nombreCompleto, String telefono, String ultimaVisita) {
-        this.id = id;
-        this.nombreCompleto = nombreCompleto;
-        this.telefono = telefono;
-        this.ultimaVisita = ultimaVisita;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getUltimaVisita() {
-        return ultimaVisita;
-    }
-
-    public void setUltimaVisita(String ultimaVisita) {
-        this.ultimaVisita = ultimaVisita;
-    }
 }
