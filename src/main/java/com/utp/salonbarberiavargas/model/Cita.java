@@ -1,73 +1,93 @@
 package com.utp.salonbarberiavargas.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity 
-@Table (name = "citas")
+@Getter
+@Setter
+@Entity
+@Table(name = "citas")
 public class Cita {
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private String idCita;
-    private String nombreCliente;
-    private String telefono;
-    private String nombreServicio;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_cita")
+    private Integer idCita;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    @NotNull(message = "Debe seleccionar un cliente")
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "id_servicio")
+    @NotNull(message = "Debe seleccionar un servicio")
+    private Servicio servicio;
+
+    @NotBlank(message = "La fecha es obligatoria")
     private String fecha;
+
+    @NotBlank(message = "La hora es obligatoria")
     private String hora;
-    private double precio;
+
+    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser un valor positivo")
+    @DecimalMin(value = "0.01", message = "El precio debe ser mayor que cero")
+    private Double precio;
+
+    @NotBlank(message = "El estado de la cita es obligatorio")
     private String estadoCita;
+
+    private String barbero;
 
     public Cita() {
     }
 
-    public Cita(String idCita, String nombreCliente, String telefono, String nombreServicio, String fecha, String hora, double precio, String estadoCita) {
+    public Cita(Integer idCita, Cliente cliente, Servicio servicio, String fecha, String hora, Double precio, String estadoCita, String barbero) {
         this.idCita = idCita;
-        this.nombreCliente = nombreCliente;
-        this.telefono = telefono;
-        this.nombreServicio = nombreServicio;
+        this.cliente = cliente;
+        this.servicio = servicio;
         this.fecha = fecha;
         this.hora = hora;
         this.precio = precio;
         this.estadoCita = estadoCita;
+        this.barbero = barbero;
     }
 
-    public Cita(String idCita, String nombreCliente, String nombreServicio, String fecha, String hora, double precio, String estadoCita) {
-        this(idCita, nombreCliente, "", nombreServicio, fecha, hora, precio, estadoCita);
-    }
-
-    public String getIdCita() {
+    public Integer getIdCita() {
         return idCita;
     }
 
-    public void setIdCita(String idCita) {
+    public void setIdCita(Integer idCita) {
         this.idCita = idCita;
     }
 
-    public String getNombreCliente() {
-        return nombreCliente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public Servicio getServicio() {
+        return servicio;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getNombreServicio() {
-        return nombreServicio;
-    }
-
-    public void setNombreServicio(String nombreServicio) {
-        this.nombreServicio = nombreServicio;
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
     }
 
     public String getFecha() {
@@ -86,11 +106,11 @@ public class Cita {
         this.hora = hora;
     }
 
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }
 
@@ -100,5 +120,25 @@ public class Cita {
 
     public void setEstadoCita(String estadoCita) {
         this.estadoCita = estadoCita;
+    }
+
+    public String getBarbero() {
+        return barbero;
+    }
+
+    public void setBarbero(String barbero) {
+        this.barbero = barbero;
+    }
+
+    public String getNombreCliente() {
+        return cliente != null ? cliente.getNombreCompleto() : "";
+    }
+
+    public String getTelefono() {
+        return cliente != null ? cliente.getTelefono() : "";
+    }
+
+    public String getNombreServicio() {
+        return servicio != null ? servicio.getNombre_servicio() : "";
     }
 }
