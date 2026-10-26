@@ -4,9 +4,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,30 +16,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.utp.salonbarberiavargas.model.Cita;
+import com.utp.salonbarberiavargas.model.Cliente;
+import com.utp.salonbarberiavargas.model.Servicio;
+import com.utp.salonbarberiavargas.repository.ClienteRepository;
+import com.utp.salonbarberiavargas.repository.ServicioRepository;
+import com.utp.salonbarberiavargas.service.CitaService;
 
 @Controller
 public class CitaController {
 
-    private List<Cita> listaCitas = new ArrayList<>();
-    private int contadorId = 110;
+    @Autowired
+    private CitaService citaService;
 
-    public CitaController() {
-        LocalDate hoy = LocalDate.now();
-        LocalDate lunes = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        
-        // listaCitas.add(new Cita("#CT-101", "Juan Pérez", "987654321", "Corte Fade", lunes.toString(), "09:00", 25.0, "Confirmada"));
-        // listaCitas.add(new Cita("#CT-102", "Marcos Lima", "998877665", "Combo VIP", lunes.plusDays(1).toString(), "11:00", 40.0, "Pendiente"));
-        // listaCitas.add(new Cita("#CT-103", "Carlos Ruiz", "912345678", "Barba Spa", lunes.plusDays(2).toString(), "09:00", 20.0, "En Curso"));
-        // listaCitas.add(new Cita("#CT-104", "David Solís", "945612378", "Corte Clásico", lunes.plusDays(3).toString(), "11:00", 25.0, "Confirmada"));
-        // listaCitas.add(new Cita("#CT-105", "Luis Ramos", "923456789", "Colorimetría", lunes.plusDays(4).toString(), "15:00", 35.0, "Atendida"));
-        // listaCitas.add(new Cita("#CT-106", "Renato Paz", "934567890", "Fade Completo", lunes.plusDays(4).toString(), "15:00", 25.0, "Cancelada"));
+    @Autowired
+    private ClienteRepository clienteRepository;
 
-        // listaCitas.add(new Cita("#CT-107", "Roberto Sánchez", "966554433", "Corte Fade", hoy.toString(), "09:00", 25.0, "Confirmada"));
-
-        LocalDate lunesSig = lunes.plusWeeks(1);
-        // listaCitas.add(new Cita("#CT-108", "Anderson Cruz", "955443322", "Corte Fade", lunesSig.toString(), "09:00", 25.0, "Confirmada"));
-        // listaCitas.add(new Cita("#CT-109", "Mateo Silva", "944332211", "Barba Spa", lunesSig.plusDays(2).toString(), "11:00", 20.0, "Pendiente"));
-    }
+    @Autowired
+    private ServicioRepository servicioRepository;
 
     private String obtenerNombreMes(int mes) {
         String[] meses = {
@@ -52,8 +45,9 @@ public class CitaController {
         return "";
     }
 
-    private Cita buscarSlotPorFechaHora(String fechaExacta, String horaTarget) {
-        return listaCitas.stream()
+    private Cita buscarSlotPorFechaHora(List<Cita> lista, String fechaExacta, String horaTarget) {
+        if (lista == null) return null;
+        return lista.stream()
             .filter(c -> {
                 if (c.getFecha() == null || c.getHora() == null) return false;
                 boolean matchFecha = c.getFecha().equalsIgnoreCase(fechaExacta)
@@ -72,7 +66,13 @@ public class CitaController {
 
     @GetMapping("/citas")
     public String mostrarCitas(@RequestParam(name = "offset", defaultValue = "0") int offset, Model model) {
+        List<Cita> listaCitas = citaService.listar();
+        List<Cliente> listaClientes = clienteRepository.findAll();
+        List<Servicio> listaServicios = servicioRepository.findAll();
+
         model.addAttribute("listaCitas", listaCitas);
+        model.addAttribute("listaClientes", listaClientes);
+        model.addAttribute("listaServicios", listaServicios);
         model.addAttribute("offset", offset);
 
         LocalDate hoy = LocalDate.now();
@@ -120,88 +120,116 @@ public class CitaController {
             .count();
         model.addAttribute("citasPendientes", pendientes);
 
-        model.addAttribute("slotLunes9", buscarSlotPorFechaHora(fLunes.toString(), "09:00"));
-        model.addAttribute("slotMartes9", buscarSlotPorFechaHora(fMartes.toString(), "09:00"));
-        model.addAttribute("slotMiercoles9", buscarSlotPorFechaHora(fMiercoles.toString(), "09:00"));
-        model.addAttribute("slotJueves9", buscarSlotPorFechaHora(fJueves.toString(), "09:00"));
-        model.addAttribute("slotViernes9", buscarSlotPorFechaHora(fViernes.toString(), "09:00"));
+        model.addAttribute("slotLunes9", buscarSlotPorFechaHora(listaCitas, fLunes.toString(), "09:00"));
+        model.addAttribute("slotMartes9", buscarSlotPorFechaHora(listaCitas, fMartes.toString(), "09:00"));
+        model.addAttribute("slotMiercoles9", buscarSlotPorFechaHora(listaCitas, fMiercoles.toString(), "09:00"));
+        model.addAttribute("slotJueves9", buscarSlotPorFechaHora(listaCitas, fJueves.toString(), "09:00"));
+        model.addAttribute("slotViernes9", buscarSlotPorFechaHora(listaCitas, fViernes.toString(), "09:00"));
 
-        model.addAttribute("slotLunes11", buscarSlotPorFechaHora(fLunes.toString(), "11:00"));
-        model.addAttribute("slotMartes11", buscarSlotPorFechaHora(fMartes.toString(), "11:00"));
-        model.addAttribute("slotMiercoles11", buscarSlotPorFechaHora(fMiercoles.toString(), "11:00"));
-        model.addAttribute("slotJueves11", buscarSlotPorFechaHora(fJueves.toString(), "11:00"));
-        model.addAttribute("slotViernes11", buscarSlotPorFechaHora(fViernes.toString(), "11:00"));
+        model.addAttribute("slotLunes11", buscarSlotPorFechaHora(listaCitas, fLunes.toString(), "11:00"));
+        model.addAttribute("slotMartes11", buscarSlotPorFechaHora(listaCitas, fMartes.toString(), "11:00"));
+        model.addAttribute("slotMiercoles11", buscarSlotPorFechaHora(listaCitas, fMiercoles.toString(), "11:00"));
+        model.addAttribute("slotJueves11", buscarSlotPorFechaHora(listaCitas, fJueves.toString(), "11:00"));
+        model.addAttribute("slotViernes11", buscarSlotPorFechaHora(listaCitas, fViernes.toString(), "11:00"));
 
-        model.addAttribute("slotLunes15", buscarSlotPorFechaHora(fLunes.toString(), "15:00"));
-        model.addAttribute("slotMartes15", buscarSlotPorFechaHora(fMartes.toString(), "15:00"));
-        model.addAttribute("slotMiercoles15", buscarSlotPorFechaHora(fMiercoles.toString(), "15:00"));
-        model.addAttribute("slotJueves15", buscarSlotPorFechaHora(fJueves.toString(), "15:00"));
-        model.addAttribute("slotViernes15", buscarSlotPorFechaHora(fViernes.toString(), "15:00"));
+        model.addAttribute("slotLunes15", buscarSlotPorFechaHora(listaCitas, fLunes.toString(), "15:00"));
+        model.addAttribute("slotMartes15", buscarSlotPorFechaHora(listaCitas, fMartes.toString(), "15:00"));
+        model.addAttribute("slotMiercoles15", buscarSlotPorFechaHora(listaCitas, fMiercoles.toString(), "15:00"));
+        model.addAttribute("slotJueves15", buscarSlotPorFechaHora(listaCitas, fJueves.toString(), "15:00"));
+        model.addAttribute("slotViernes15", buscarSlotPorFechaHora(listaCitas, fViernes.toString(), "15:00"));
 
         return "citas/citas";
     }
 
     @PostMapping("/citas/agregar")
-    public String agregarCita(@ModelAttribute Cita nuevaCita, @RequestParam(name = "offset", defaultValue = "0") int offset) {
-        if (nuevaCita.getIdCita() == null || nuevaCita.getIdCita().isBlank()) {
-            nuevaCita.setIdCita("#CT-" + (contadorId++));
+    public String agregarCita(@ModelAttribute Cita nuevaCita,
+                              @RequestParam(name = "idCliente", required = false) Integer idCliente,
+                              @RequestParam(name = "idServicio", required = false) Integer idServicio,
+                              @RequestParam(name = "offset", defaultValue = "0") int offset) {
+
+        if (nuevaCita.getCliente() == null && idCliente != null) {
+            nuevaCita.setCliente(clienteRepository.findById(idCliente).orElse(null));
         }
+
+        if (nuevaCita.getServicio() == null && idServicio != null) {
+            Servicio serv = servicioRepository.findById(idServicio).orElse(null);
+            nuevaCita.setServicio(serv);
+            if (serv != null && (nuevaCita.getPrecio() == null || nuevaCita.getPrecio() <= 0)) {
+                nuevaCita.setPrecio(serv.getPrecio());
+            }
+        }
+
+        if (nuevaCita.getPrecio() == null || nuevaCita.getPrecio() <= 0) {
+            nuevaCita.setPrecio(25.0);
+        }
+
         if (nuevaCita.getEstadoCita() == null || nuevaCita.getEstadoCita().isBlank()) {
             nuevaCita.setEstadoCita("Confirmada");
         }
-        if (nuevaCita.getPrecio() <= 0) {
-            if ("Barba Spa".equalsIgnoreCase(nuevaCita.getNombreServicio())) {
-                nuevaCita.setPrecio(20.0);
-            } else if ("Combo VIP".equalsIgnoreCase(nuevaCita.getNombreServicio())) {
-                nuevaCita.setPrecio(40.0);
-            } else if ("Colorimetría".equalsIgnoreCase(nuevaCita.getNombreServicio())) {
-                nuevaCita.setPrecio(35.0);
-            } else {
-                nuevaCita.setPrecio(25.0);
-            }
+
+        if (nuevaCita.getBarbero() == null || nuevaCita.getBarbero().isBlank()) {
+            nuevaCita.setBarbero("Carlos Vargas");
         }
-        listaCitas.add(nuevaCita);
+
+        citaService.guardar(nuevaCita);
         return redireccionar(offset);
     }
 
     @PostMapping("/citas/editar")
-    public String editarCita(@ModelAttribute Cita citaEditada, @RequestParam(name = "offset", defaultValue = "0") int offset) {
-        for (Cita c : listaCitas) {
-            if (c.getIdCita().equalsIgnoreCase(citaEditada.getIdCita())) {
-                c.setNombreCliente(citaEditada.getNombreCliente());
-                c.setNombreServicio(citaEditada.getNombreServicio());
-                c.setFecha(citaEditada.getFecha());
-                c.setHora(citaEditada.getHora());
+    public String editarCita(@ModelAttribute Cita citaEditada,
+                             @RequestParam(name = "idCliente", required = false) Integer idCliente,
+                             @RequestParam(name = "idServicio", required = false) Integer idServicio,
+                             @RequestParam(name = "offset", defaultValue = "0") int offset) {
+
+        if (citaEditada.getIdCita() != null) {
+            Cita existente = citaService.buscarPorId(citaEditada.getIdCita());
+            if (existente != null) {
+                existente.setFecha(citaEditada.getFecha());
+                existente.setHora(citaEditada.getHora());
+
                 if (citaEditada.getEstadoCita() != null && !citaEditada.getEstadoCita().isBlank()) {
-                    c.setEstadoCita(citaEditada.getEstadoCita());
+                    existente.setEstadoCita(citaEditada.getEstadoCita());
                 }
-                if (citaEditada.getTelefono() != null && !citaEditada.getTelefono().isBlank()) {
-                    c.setTelefono(citaEditada.getTelefono());
+
+                if (citaEditada.getBarbero() != null && !citaEditada.getBarbero().isBlank()) {
+                    existente.setBarbero(citaEditada.getBarbero());
                 }
-                if ("Barba Spa".equalsIgnoreCase(citaEditada.getNombreServicio())) {
-                    c.setPrecio(20.0);
-                } else if ("Combo VIP".equalsIgnoreCase(citaEditada.getNombreServicio())) {
-                    c.setPrecio(40.0);
-                } else if ("Colorimetría".equalsIgnoreCase(citaEditada.getNombreServicio())) {
-                    c.setPrecio(35.0);
-                } else {
-                    c.setPrecio(25.0);
+
+                if (idCliente != null) {
+                    existente.setCliente(clienteRepository.findById(idCliente).orElse(existente.getCliente()));
+                } else if (citaEditada.getCliente() != null) {
+                    existente.setCliente(citaEditada.getCliente());
                 }
-                break;
+
+                if (idServicio != null) {
+                    Servicio serv = servicioRepository.findById(idServicio).orElse(existente.getServicio());
+                    existente.setServicio(serv);
+                    if (serv != null) {
+                        existente.setPrecio(serv.getPrecio());
+                    }
+                } else if (citaEditada.getServicio() != null) {
+                    existente.setServicio(citaEditada.getServicio());
+                }
+
+                if (citaEditada.getPrecio() != null && citaEditada.getPrecio() > 0) {
+                    existente.setPrecio(citaEditada.getPrecio());
+                }
+
+                citaService.guardar(existente);
             }
         }
+
         return redireccionar(offset);
     }
 
     @PostMapping("/citas/eliminar/{id}")
-    public String eliminarCita(@PathVariable("id") String id, @RequestParam(name = "offset", defaultValue = "0") int offset) {
-        listaCitas.removeIf(c -> c.getIdCita().equalsIgnoreCase(id) 
-                              || c.getIdCita().replace("#", "").equalsIgnoreCase(id.replace("#", "")));
+    public String eliminarCita(@PathVariable("id") Integer id, @RequestParam(name = "offset", defaultValue = "0") int offset) {
+        citaService.eliminar(id);
         return redireccionar(offset);
     }
 
     @PostMapping("/citas/eliminar")
-    public String eliminarCitaPost(@RequestParam("idCita") String idCita, @RequestParam(name = "offset", defaultValue = "0") int offset) {
+    public String eliminarCitaPost(@RequestParam("idCita") Integer idCita, @RequestParam(name = "offset", defaultValue = "0") int offset) {
         return eliminarCita(idCita, offset);
     }
 

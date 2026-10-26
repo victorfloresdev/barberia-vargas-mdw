@@ -1,9 +1,16 @@
 package com.utp.salonbarberiavargas.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.utp.salonbarberiavargas.model.Cita;
 
-public interface CitaRepository extends JpaRepository<Cita, Integer>{ // El error que marca se corregirá cuando se modifique el tipo de dato de idCita en la clase Cita de String a Integer
+@Repository
+public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
+    List<Cita> findByFecha(String fecha);
+
+    List<Cita> findByEstadoCita(String estadoCita);
 }

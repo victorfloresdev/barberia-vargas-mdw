@@ -12,6 +12,7 @@ import com.utp.salonbarberiavargas.model.Cita;
 import com.utp.salonbarberiavargas.model.ItemVenta;
 import com.utp.salonbarberiavargas.model.Producto;
 import com.utp.salonbarberiavargas.model.Venta;
+import com.utp.salonbarberiavargas.service.CitaService;
 import com.utp.salonbarberiavargas.service.VentaService;
 
 @Controller

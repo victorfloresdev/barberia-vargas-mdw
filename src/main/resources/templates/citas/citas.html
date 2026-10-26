@@ -376,7 +376,7 @@
                     </thead>
                     <tbody>
                         <tr th:each="cita : ${listaCitas}">
-                            <td><span class="badge bg-dark-subtle text-dark-emphasis" th:text="${cita.idCita}">#CT-101</span></td>
+                            <td><span class="badge bg-dark-subtle text-dark-emphasis" th:text="'#CT-' + ${cita.idCita}">#CT-101</span></td>
                             <td class="fw-semibold" th:text="${cita.nombreCliente}">Juan Pérez</td>
                             <td th:text="${cita.nombreServicio}">Corte Fade</td>
                             <td th:text="${cita.fecha}">2026-09-21</td>
@@ -390,6 +390,8 @@
                             <td class="text-end">
                                 <button class="btn btn-sm btn-light border rounded-pill px-3 me-1 btn-edit-cita"
                                         th:data-id="${cita.idCita}"
+                                        th:data-idcliente="${cita.cliente != null ? (cita.cliente.id != null ? cita.cliente.id : cita.cliente.idCliente) : ''}"
+                                        th:data-idservicio="${cita.servicio != null ? cita.servicio.id_servicio : ''}"
                                         th:data-nombre="${cita.nombreCliente}"
                                         th:data-telefono="${cita.telefono}"
                                         th:data-servicio="${cita.nombreServicio}"
@@ -425,32 +427,29 @@
                     <form th:action="@{/citas/agregar}" method="post">
                         <input type="hidden" name="offset" th:value="${offset}">
                         <div class="mb-3">
-                            <label for="clienteNombre" class="form-label fw-semibold small text-muted">Nombre del Cliente</label>
+                            <label for="clienteSelect" class="form-label fw-semibold small text-muted">Cliente Registrado</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
-                                <input type="text" class="form-control" id="clienteNombre" name="nombreCliente" placeholder="Ej. Roberto Sánchez" required>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="clienteTel" class="form-label fw-semibold small text-muted">Teléfono / WhatsApp</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
-                                <input type="tel" class="form-control" id="clienteTel" name="telefono" placeholder="Ej. 987654321" required>
+                                <select class="form-select" id="clienteSelect" name="idCliente" required>
+                                    <option selected disabled value="">Seleccionar cliente...</option>
+                                    <option th:each="cli : ${listaClientes}" 
+                                            th:value="${cli.id != null ? cli.id : cli.idCliente}" 
+                                            th:text="${cli.nombreCompleto} + (${cli.telefono != null ? ' - ' + cli.telefono : ''})"></option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="selectServicio" class="form-label fw-semibold small text-muted">Servicio</label>
-                            <select class="form-select" id="selectServicio" name="nombreServicio" required>
-                                <option selected disabled value="">Seleccionar...</option>
-                                <option value="Corte Fade">Corte Fade - S/ 25.00</option>
-                                <option value="Barba Spa">Barba Spa - S/ 20.00</option>
-                                <option value="Combo VIP">Combo VIP - S/ 40.00</option>
-                                <option value="Colorimetría">Colorimetría - S/ 35.00</option>
-                                <option value="Corte Clásico">Corte Clásico - S/ 25.00</option>
-                                <option value="Fade Completo">Fade Completo - S/ 25.00</option>
-                            </select>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-scissors"></i></span>
+                                <select class="form-select" id="selectServicio" name="idServicio" required>
+                                    <option selected disabled value="">Seleccionar servicio...</option>
+                                    <option th:each="srv : ${listaServicios}" 
+                                            th:value="${srv.id_servicio}" 
+                                            th:text="${srv.nombre_servicio} + ' - S/ ' + ${#numbers.formatDecimal(srv.precio, 1, 2)}"></option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="row g-2 mb-4">
@@ -490,22 +489,21 @@
                         <input type="hidden" name="offset" th:value="${offset}">
                         <input type="hidden" id="editIdCita" name="idCita">
                         <div class="mb-3">
-                            <label for="editClienteNombre" class="form-label fw-semibold small text-muted">Nombre del Cliente</label>
-                            <input type="text" class="form-control" id="editClienteNombre" name="nombreCliente" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editClienteTel" class="form-label fw-semibold small text-muted">Teléfono / WhatsApp</label>
-                            <input type="tel" class="form-control" id="editClienteTel" name="telefono">
+                            <label for="editClienteSelect" class="form-label fw-semibold small text-muted">Cliente</label>
+                            <select class="form-select" id="editClienteSelect" name="idCliente" required>
+                                <option selected disabled value="">Seleccionar cliente...</option>
+                                <option th:each="cli : ${listaClientes}" 
+                                        th:value="${cli.id != null ? cli.id : cli.idCliente}" 
+                                        th:text="${cli.nombreCompleto}"></option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="editSelectServicio" class="form-label fw-semibold small text-muted">Servicio</label>
-                            <select class="form-select" id="editSelectServicio" name="nombreServicio" required>
-                                <option value="Corte Fade">Corte Fade - S/ 25.00</option>
-                                <option value="Barba Spa">Barba Spa - S/ 20.00</option>
-                                <option value="Combo VIP">Combo VIP - S/ 40.00</option>
-                                <option value="Colorimetría">Colorimetría - S/ 35.00</option>
-                                <option value="Corte Clásico">Corte Clásico - S/ 25.00</option>
-                                <option value="Fade Completo">Fade Completo - S/ 25.00</option>
+                            <select class="form-select" id="editSelectServicio" name="idServicio" required>
+                                <option selected disabled value="">Seleccionar servicio...</option>
+                                <option th:each="srv : ${listaServicios}" 
+                                        th:value="${srv.id_servicio}" 
+                                        th:text="${srv.nombre_servicio} + ' - S/ ' + ${#numbers.formatDecimal(srv.precio, 1, 2)}"></option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -591,18 +589,19 @@
                     const button = event.relatedTarget;
                     if (button && button.classList.contains('btn-edit-cita')) {
                         const id = button.getAttribute('data-id') || '';
-                        const nombre = button.getAttribute('data-nombre') || '';
-                        const telefono = button.getAttribute('data-telefono') || '';
-                        const servicio = button.getAttribute('data-servicio') || 'Corte Fade';
+                        const idCliente = button.getAttribute('data-idcliente') || '';
+                        const idServicio = button.getAttribute('data-idservicio') || '';
                         const fecha = button.getAttribute('data-fecha') || '';
                         const hora = button.getAttribute('data-hora') || '';
                         const estado = button.getAttribute('data-estado') || 'Confirmada';
 
                         document.getElementById('editIdCita').value = id;
-                        document.getElementById('editClienteNombre').value = nombre;
-                        const telInput = document.getElementById('editClienteTel');
-                        if (telInput) telInput.value = telefono;
-                        document.getElementById('editSelectServicio').value = servicio;
+                        if (idCliente && document.getElementById('editClienteSelect')) {
+                            document.getElementById('editClienteSelect').value = idCliente;
+                        }
+                        if (idServicio && document.getElementById('editSelectServicio')) {
+                            document.getElementById('editSelectServicio').value = idServicio;
+                        }
                         document.getElementById('editFechaCita').value = fecha;
                         document.getElementById('editHoraCita').value = hora;
                         const estadoInput = document.getElementById('editEstadoCita');
