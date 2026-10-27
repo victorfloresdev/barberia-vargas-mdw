@@ -60,13 +60,27 @@ public class ProductoRestController {
             return ResponseEntity.badRequest().body(errores);
         }
 
-        if (producto.getCategoria() != null && producto.getCategoria().getIdCategoria() != null) {
-            Categoria categoria = categoriaService.buscarPorId(producto.getCategoria().getIdCategoria());
-            if (categoria != null) {
-                producto.setCategoria(categoria);
-            }
+        Integer idCat = null;
+        if (producto.getCategoria() != null) {
+            idCat = producto.getCategoria().getIdCategoria() != null 
+                    ? producto.getCategoria().getIdCategoria() 
+                    : producto.getCategoria().getId();
         }
 
+        if (idCat == null) {
+            Map<String, List<String>> errores = new HashMap<>();
+            errores.put("categoria", List.of("Debe especificar el ID de la categoría"));
+            return ResponseEntity.badRequest().body(errores);
+        }
+
+        Categoria categoria = categoriaService.buscarPorId(idCat);
+        if (categoria == null) {
+            Map<String, List<String>> errores = new HashMap<>();
+            errores.put("categoria", List.of("La categoría con ID " + idCat + " no existe"));
+            return ResponseEntity.badRequest().body(errores);
+        }
+
+        producto.setCategoria(categoria);
         Producto guardado = productoService.guardar(producto);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
     }
@@ -87,15 +101,32 @@ public class ProductoRestController {
             return ResponseEntity.notFound().build();
         }
 
-        if (datosNuevos.getCategoria() != null && datosNuevos.getCategoria().getIdCategoria() != null) {
-            Categoria categoria = categoriaService.buscarPorId(datosNuevos.getCategoria().getIdCategoria());
-            if (categoria != null) {
-                datosNuevos.setCategoria(categoria);
-            }
+        Integer idCat = null;
+        if (datosNuevos.getCategoria() != null) {
+            idCat = datosNuevos.getCategoria().getIdCategoria() != null 
+                    ? datosNuevos.getCategoria().getIdCategoria() 
+                    : datosNuevos.getCategoria().getId();
         }
 
-        datosNuevos.setIdProducto(id);
-        Producto productoActualizado = productoService.guardar(datosNuevos);
+        if (idCat == null) {
+            Map<String, List<String>> errores = new HashMap<>();
+            errores.put("categoria", List.of("Debe especificar el ID de la categoría"));
+            return ResponseEntity.badRequest().body(errores);
+        }
+
+        Categoria categoria = categoriaService.buscarPorId(idCat);
+        if (categoria == null) {
+            Map<String, List<String>> errores = new HashMap<>();
+            errores.put("categoria", List.of("La categoría con ID " + idCat + " no existe"));
+            return ResponseEntity.badRequest().body(errores);
+        }
+
+        productoExistente.setNombre(datosNuevos.getNombre());
+        productoExistente.setPrecio(datosNuevos.getPrecio());
+        productoExistente.setStock(datosNuevos.getStock());
+        productoExistente.setCategoria(categoria);
+
+        Producto productoActualizado = productoService.guardar(productoExistente);
         return ResponseEntity.ok(productoActualizado);
     }
 

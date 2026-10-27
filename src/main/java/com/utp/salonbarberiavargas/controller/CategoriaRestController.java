@@ -74,8 +74,8 @@ public class CategoriaRestController {
             return ResponseEntity.notFound().build();
         }
 
-        datosNuevos.setIdCategoria(id);
-        Categoria categoriaActualizada = categoriaService.guardar(datosNuevos);
+        categoriaExistente.setNombre(datosNuevos.getNombre());
+        Categoria categoriaActualizada = categoriaService.guardar(categoriaExistente);
         return ResponseEntity.ok(categoriaActualizada);
     }
 

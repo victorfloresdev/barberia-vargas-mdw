@@ -15,10 +15,12 @@ import com.utp.salonbarberiavargas.service.CategoriaService;
 import com.utp.salonbarberiavargas.service.ProductoService;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,9 +73,21 @@ class InventarioControllerTest {
     void testEliminarProducto() throws Exception {
         mockMvc.perform(get("/inventario/eliminar/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/inventario"));
+                .andExpect(redirectedUrl("/inventario"))
+                .andExpect(flash().attributeExists("mensajeExito"));
 
         verify(productoService).eliminar(1);
+    }
+
+    @Test
+    void testEliminarProductoConVentasAsociadasMuestraError() throws Exception {
+        doThrow(new org.springframework.dao.DataIntegrityViolationException("FK constraint"))
+                .when(productoService).eliminar(1);
+
+        mockMvc.perform(get("/inventario/eliminar/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/inventario"))
+                .andExpect(flash().attributeExists("mensajeError"));
     }
 
     @Test

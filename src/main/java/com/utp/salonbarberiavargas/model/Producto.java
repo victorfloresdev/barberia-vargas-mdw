@@ -1,5 +1,6 @@
 package com.utp.salonbarberiavargas.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_producto")
     private Integer idProducto;
 
     @NotBlank(message = "El nombre del producto es obligatorio")
@@ -34,7 +36,7 @@ public class Producto {
 
     @NotNull(message = "La categoría es obligatoria")
     @ManyToOne
-    @JoinColumn(name = "idCategoria")
+    @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 
     @NotNull(message = "El precio es obligatorio")

@@ -121,6 +121,26 @@ class ProductoRestControllerTest {
     }
 
     @Test
+    void testGuardarProductoCategoriaInexistenteRetornaBadRequest() throws Exception {
+        when(categoriaService.buscarPorId(999)).thenReturn(null);
+
+        String jsonCategoriaInexistente = """
+            {
+                "nombre": "Cera Pomada",
+                "categoria": { "idCategoria": 999 },
+                "precio": 40.0,
+                "stock": 15
+            }
+            """;
+
+        mockMvc.perform(post("/api/productos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCategoriaInexistente))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.categoria").exists());
+    }
+
+    @Test
     void testActualizarProductoValido() throws Exception {
         Categoria cat = new Categoria(1, "Capilar");
         Producto existente = new Producto(1, "Cera Pomada", cat, 40.0, 15);
@@ -146,6 +166,30 @@ class ProductoRestControllerTest {
                 .andExpect(jsonPath("$.idProducto").value(1))
                 .andExpect(jsonPath("$.nombre").value("Cera Pomada Ultra"))
                 .andExpect(jsonPath("$.precio").value(45.0));
+    }
+
+    @Test
+    void testActualizarProductoCategoriaInexistenteRetornaBadRequest() throws Exception {
+        Categoria cat = new Categoria(1, "Capilar");
+        Producto existente = new Producto(1, "Cera Pomada", cat, 40.0, 15);
+
+        when(productoService.buscarPorId(1)).thenReturn(existente);
+        when(categoriaService.buscarPorId(999)).thenReturn(null);
+
+        String jsonInvalido = """
+            {
+                "nombre": "Cera Pomada Ultra",
+                "categoria": { "idCategoria": 999 },
+                "precio": 45.0,
+                "stock": 20
+            }
+            """;
+
+        mockMvc.perform(put("/api/productos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonInvalido))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.categoria").exists());
     }
 
     @Test
