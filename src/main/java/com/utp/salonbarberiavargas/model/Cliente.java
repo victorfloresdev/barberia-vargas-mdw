@@ -20,7 +20,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente") 
-    private Integer idCliente; 
+    private Integer id; 
 
     @NotBlank(message = "El nombre completo es obligatorio")
     @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres")
