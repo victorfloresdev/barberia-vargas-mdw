@@ -37,8 +37,8 @@
                         </thead>
                         <tbody>
                             <tr th:each="cliente : ${listaClientes}">
-                                <td th:text="${cliente.id}">#000</td>
-                                <td th:text="${cliente.nombreCompleto}">Nombre del Cliente</td>
+                                <td th:text="${cliente.id}">1</td>
+                                <td th:text="${cliente.nombreCompleto}">Nombre</td>
                                 <td th:text="${cliente.telefono}">999000111</td>
                                 <td th:text="${cliente.ultimaVisita}">01/01/2026</td>
                                 <td>
@@ -48,8 +48,11 @@
                                         th:data-telefono="${cliente.telefono}" th:data-visita="${cliente.ultimaVisita}">
                                         Editar
                                     </button>
+
+
                                     <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                         data-bs-target="#modalEliminarCliente" th:data-id="${cliente.id}">
+                                        <!-- CAMBIO AQUI -->
                                         Eliminar
                                     </button>
                                 </td>
@@ -107,6 +110,7 @@
                 </div>
                 <form th:action="@{/clientes/actualizar}" method="post">
                     <div class="modal-body">
+
                         <input type="hidden" id="editId" name="id">
 
                         <div class="mb-3">

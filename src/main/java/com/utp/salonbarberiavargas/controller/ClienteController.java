@@ -1,72 +1,43 @@
 package com.utp.salonbarberiavargas.controller;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.utp.salonbarberiavargas.model.Cliente;
-
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.utp.salonbarberiavargas.service.ClienteService;
 
 @Controller
 public class ClienteController {
-
-    private static List<Cliente> clientes = new ArrayList<>();
-    private static int contadorId = 4;
-
-    // static {
-    //     clientes.add(new Cliente("#001", "Juan Pérez", "987654321", "15/10/2023"));
-    //     clientes.add(new Cliente("#002", "Carlos Mendoza", "912345678", "20/10/2023"));
-    //     clientes.add(new Cliente("#003", "Luis Ramírez", "999888777", "28/09/2026"));
-    // }
+    @Autowired
+    private ClienteService clienteService;
 
     @GetMapping("/clientes")
     public String listarClientes(Model model) {
-        model.addAttribute("listaClientes", clientes);
+        model.addAttribute("listaClientes", clienteService.listar());
         return "clientes/clientes";
     }
 
     @PostMapping("/clientes/guardar")
     public String guardarCliente(@ModelAttribute Cliente nuevoCliente) {
-        if (nuevoCliente.getId() == null || nuevoCliente.getId().isEmpty()) {
-            nuevoCliente.setId(String.format("#%03d", contadorId++));
-        }
-        if (nuevoCliente.getUltimaVisita() == null || nuevoCliente.getUltimaVisita().isEmpty()) {
+        if (nuevoCliente.getUltimaVisita() == null || nuevoCliente.getUltimaVisita().isBlank()) {
             nuevoCliente.setUltimaVisita("Hoy");
         }
-        clientes.add(nuevoCliente);
+        clienteService.guardar(nuevoCliente);
         return "redirect:/clientes";
     }
 
     @PostMapping("/clientes/actualizar")
     public String actualizarCliente(@ModelAttribute Cliente clienteActualizado) {
-        for (Cliente c : clientes) {
-            if (c.getId().equals(clienteActualizado.getId())) {
-                c.setNombreCompleto(clienteActualizado.getNombreCompleto());
-                c.setTelefono(clienteActualizado.getTelefono());
-                if (clienteActualizado.getUltimaVisita() != null && !clienteActualizado.getUltimaVisita().isEmpty()) {
-                    c.setUltimaVisita(clienteActualizado.getUltimaVisita());
-                }
-                break;
-            }
-        }
+        clienteService.guardar(clienteActualizado);
         return "redirect:/clientes";
     }
 
     @PostMapping("/clientes/eliminar")
-    public String eliminarCliente(@RequestParam("id") String id) {
-        clientes.removeIf(c -> c.getId().equals(id));
+    public String eliminarCliente(@RequestParam("id") Integer id) {
+        clienteService.eliminar(id);
         return "redirect:/clientes";
     }
-
-    @GetMapping("/login")
-    public String mostrarLogin() {
-        return "login/login";
-    }
-
 }
