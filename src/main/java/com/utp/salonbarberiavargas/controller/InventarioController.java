@@ -1,58 +1,66 @@
 package com.utp.salonbarberiavargas.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.utp.salonbarberiavargas.model.Categoria;
 import com.utp.salonbarberiavargas.model.Producto;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.utp.salonbarberiavargas.service.CategoriaService;
+import com.utp.salonbarberiavargas.service.ProductoService;
 
 @Controller
 @RequestMapping("/inventario")
 public class InventarioController {
 
-    private static final List<Producto> listaProductos = new ArrayList<>();
+    @Autowired
+    private ProductoService productoService;
 
-    // static {
-    //     listaProductos.add(new Producto("PRD-01", "Cera Pomada Fijación Mate", "Capilar", 35.00, 15));
-    //     listaProductos.add(new Producto("PRD-02", "Aceite Hidratante para Barba", "Tratamiento", 42.50, 4));
-    //     listaProductos.add(new Producto("PRD-03", "Tinte Negro Intenso Barber", "Coloración", 25.00, 0));
-    //     listaProductos.add(new Producto("PRD-04", "Shampoo Anticaída Fortificante", "Capilar", 38.00, 8));
-    //     listaProductos.add(new Producto("PRD-05", "Loción Aftershave Refrescante", "Tratamiento", 28.00, 2));
-    // }
+    @Autowired
+    private CategoriaService categoriaService;
 
     @GetMapping
     public String listarInventario(Model model) {
-        model.addAttribute("listaProductos", listaProductos);
+        model.addAttribute("listaProductos", productoService.listar());
+        model.addAttribute("listaCategorias", categoriaService.listar());
         return "inventario/inventario";
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@ModelAttribute Producto producto) {
-        boolean existe = false;
-
-        // Si el código ya existe, actualizamos sus campos (Editar)
-        for (int i = 0; i < listaProductos.size(); i++) {
-            if (listaProductos.get(i).getId().equalsIgnoreCase(producto.getId())) {
-                listaProductos.set(i, producto);
-                existe = true;
-                break;
-            }
+    public String guardarProducto(@ModelAttribute Producto producto,
+                                  @RequestParam(value = "idCategoria", required = false) Integer idCategoria) {
+        if (idCategoria != null) {
+            Categoria categoria = categoriaService.buscarPorId(idCategoria);
+            producto.setCategoria(categoria);
+        } else if (producto.getCategoria() != null && producto.getCategoria().getIdCategoria() != null) {
+            Categoria categoria = categoriaService.buscarPorId(producto.getCategoria().getIdCategoria());
+            producto.setCategoria(categoria);
         }
-
-        if (!existe) {
-            listaProductos.add(producto);
-        }
-
+        productoService.guardar(producto);
         return "redirect:/inventario";
     }
 
-    // Eliminar producto por ID
     @GetMapping("/eliminar/{id}")
-    public String eliminarProducto(@PathVariable("id") String id) {
-        listaProductos.removeIf(prod -> prod.getId().equalsIgnoreCase(id));
+    public String eliminarProducto(@PathVariable("id") Integer id) {
+        productoService.eliminar(id);
+        return "redirect:/inventario";
+    }
+
+    @PostMapping("/categoria/guardar")
+    public String guardarCategoria(@ModelAttribute Categoria categoria) {
+        categoriaService.guardar(categoria);
+        return "redirect:/inventario";
+    }
+
+    @GetMapping("/categoria/eliminar/{id}")
+    public String eliminarCategoria(@PathVariable("id") Integer id) {
+        categoriaService.eliminar(id);
         return "redirect:/inventario";
     }
 }

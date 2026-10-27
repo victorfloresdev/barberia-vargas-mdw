@@ -1,7 +1,11 @@
 package com.utp.salonbarberiavargas.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CategoriaRepository extends JpaRepository<Categoria, Integer>{ // El error que marca se arreglará cuando se cree la clase Categoria
+import com.utp.salonbarberiavargas.model.Categoria;
+
+@Repository
+public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
 }
