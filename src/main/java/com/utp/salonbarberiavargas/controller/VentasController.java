@@ -18,7 +18,10 @@ import com.utp.salonbarberiavargas.model.ItemVenta;
 import com.utp.salonbarberiavargas.model.Producto;
 import com.utp.salonbarberiavargas.model.Servicio;
 import com.utp.salonbarberiavargas.model.Venta;
+import com.utp.salonbarberiavargas.service.ClienteService;
 import com.utp.salonbarberiavargas.service.VentaService;
+import com.utp.salonbarberiavargas.service.ProductoService;
+import com.utp.salonbarberiavargas.service.ServicioService;
 
 @Controller
 public class VentasController {
