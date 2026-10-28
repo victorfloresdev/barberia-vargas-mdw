@@ -1,70 +1,74 @@
 package com.utp.salonbarberiavargas.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity 
-@Table (name = "servicios")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "servicios")
 public class Servicio {
-    @Id 
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id_servicio;
-    private String nombre_servicio;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_servicio")
+    private Integer idServicio;
+
+    @NotBlank(message = "El nombre del servicio es obligatorio")
+    @Size(min = 3, max = 80, message = "El nombre debe tener entre 3 y 80 caracteres")
+    private String nombreServicio;
+
+    @NotBlank(message = "La descripción es obligatoria")
     private String descripcion;
-    private int duracion_estimada;
-    private double precio;
 
-    public Servicio() {
+    @NotNull(message = "La duración es obligatoria")
+    @Positive(message = "La duración debe ser mayor a 0")
+    private Integer duracionEstimada;
+
+    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser mayor a 0")
+    @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
+    private Double precio;
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Integer getId_servicio() {
+        return idServicio;
     }
 
-    public Servicio(int id_servicio, String nombre_servicio, String descripcion, int duracion_estimada, double precio) {
-        this.id_servicio = id_servicio;
-        this.nombre_servicio = nombre_servicio;
-        this.descripcion = descripcion;
-        this.duracion_estimada = duracion_estimada;
-        this.precio = precio;
+    public void setId_servicio(Integer id_servicio) {
+        this.idServicio = id_servicio;
     }
 
-    public int getId_servicio() {
-        return id_servicio;
-    }
-
-    public void setId_servicio(int id_servicio) {
-        this.id_servicio = id_servicio;
-    }
-
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public String getNombre_servicio() {
-        return nombre_servicio;
+        return nombreServicio;
     }
 
     public void setNombre_servicio(String nombre_servicio) {
-        this.nombre_servicio = nombre_servicio;
+        this.nombreServicio = nombre_servicio;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Integer getDuracion_estimada() {
+        return duracionEstimada;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public int getDuracion_estimada() {
-        return duracion_estimada;
-    }
-
-    public void setDuracion_estimada(int duracion_estimada) {
-        this.duracion_estimada = duracion_estimada;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setDuracion_estimada(Integer duracion_estimada) {
+        this.duracionEstimada = duracion_estimada;
     }
 }
