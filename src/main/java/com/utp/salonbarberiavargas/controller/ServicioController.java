@@ -31,11 +31,11 @@ public class ServicioController {
         return "servicios/servicios";
     }
 
-    @PostMapping({"/servicios/guardar", "/servicios/agregar"})
+    @PostMapping({ "/servicios/guardar", "/servicios/agregar" })
     public String guardarServicio(@Valid @ModelAttribute("nuevoServicio") Servicio nuevoServicio,
-                                  BindingResult result,
-                                  Model model,
-                                  RedirectAttributes redirectAttributes) {
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("servicios", servicioService.listar());
             model.addAttribute("errorModal", "agregar");
@@ -50,16 +50,17 @@ public class ServicioController {
 
     @PostMapping("/servicios/editar")
     public String editarServicio(@Valid @ModelAttribute("nuevoServicio") Servicio servicioEditado,
-                                 BindingResult result,
-                                 Model model,
-                                 RedirectAttributes redirectAttributes) {
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("servicios", servicioService.listar());
             model.addAttribute("errorModal", "editar");
             return "servicios/servicios";
         }
 
-        if (servicioEditado.getIdServicio() == null || servicioService.buscarPorId(servicioEditado.getIdServicio()) == null) {
+        if (servicioEditado.getIdServicio() == null
+                || servicioService.buscarPorId(servicioEditado.getIdServicio()) == null) {
             redirectAttributes.addFlashAttribute("mensajeError", "El servicio a editar no existe.");
             return "redirect:/servicios";
         }
@@ -72,8 +73,13 @@ public class ServicioController {
     @PostMapping("/servicios/eliminar/{id}")
     public String eliminarServicio(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         if (id != null && servicioService.buscarPorId(id) != null) {
-            servicioService.eliminar(id);
-            redirectAttributes.addFlashAttribute("mensajeExito", "Servicio eliminado exitosamente.");
+            try {
+                servicioService.eliminar(id);
+                redirectAttributes.addFlashAttribute("mensajeExito", "Servicio eliminado exitosamente.");
+            } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+                redirectAttributes.addFlashAttribute("mensajeError",
+                        "No se puede eliminar el servicio porque tiene citas o ventas asociadas.");
+            }
         } else {
             redirectAttributes.addFlashAttribute("mensajeError", "No se encontró el servicio a eliminar.");
         }
@@ -81,7 +87,8 @@ public class ServicioController {
     }
 
     @PostMapping("/servicios/eliminar")
-    public String eliminarServicioPost(@RequestParam("idServicio") Integer idServicio, RedirectAttributes redirectAttributes) {
+    public String eliminarServicioPost(@RequestParam("idServicio") Integer idServicio,
+            RedirectAttributes redirectAttributes) {
         return eliminarServicio(idServicio, redirectAttributes);
     }
 
@@ -92,10 +99,10 @@ public class ServicioController {
 
     @PostMapping("/servicios/reservar")
     public String reservarServicio(@RequestParam("idServicio") Integer idServicio,
-                                   @RequestParam("clienteNombre") String clienteNombre,
-                                   @RequestParam("clienteTelefono") String clienteTelefono,
-                                   @RequestParam("fechaCita") String fechaCita,
-                                   RedirectAttributes redirectAttributes) {
+            @RequestParam("clienteNombre") String clienteNombre,
+            @RequestParam("clienteTelefono") String clienteTelefono,
+            @RequestParam("fechaCita") String fechaCita,
+            RedirectAttributes redirectAttributes) {
         Servicio servicio = servicioService.buscarPorId(idServicio);
         if (servicio != null) {
             redirectAttributes.addFlashAttribute("mensajeReserva",

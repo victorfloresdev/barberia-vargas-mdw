@@ -21,7 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "servicio")
+@Table(name = "servicios")
 public class Servicio {
 
     @Id
@@ -45,6 +45,7 @@ public class Servicio {
     @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
     private Double precio;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public Integer getId_servicio() {
         return idServicio;
     }
@@ -53,6 +54,7 @@ public class Servicio {
         this.idServicio = id_servicio;
     }
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public String getNombre_servicio() {
         return nombreServicio;
     }
@@ -61,6 +63,7 @@ public class Servicio {
         this.nombreServicio = nombre_servicio;
     }
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public Integer getDuracion_estimada() {
         return duracionEstimada;
     }
