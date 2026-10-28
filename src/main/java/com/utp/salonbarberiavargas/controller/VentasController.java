@@ -25,8 +25,6 @@ import com.utp.salonbarberiavargas.service.ServicioService;
 
 @Controller
 public class VentasController {
-    // Los siguientes errores desaparecerán cuando estén creados los
-    // correspondientes servicios
     @Autowired
     private ClienteService clienteService;
 

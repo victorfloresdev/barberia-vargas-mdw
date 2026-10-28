@@ -10,8 +10,6 @@ import com.utp.salonbarberiavargas.model.ItemVenta;
 import com.utp.salonbarberiavargas.model.Producto;
 import com.utp.salonbarberiavargas.model.Venta;
 import com.utp.salonbarberiavargas.repository.VentaRepository;
-import com.utp.salonbarberiavargas.service.ProductoService; // Este error se arreglará cuando se cree el service de producto
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -19,7 +17,7 @@ public class VentaService {
     @Autowired
     private VentaRepository ventaRepository;
     @Autowired
-    private ProductoService productoService; // Este error se arreglará cuando se cree el service de producto
+    private ProductoService productoService;
 
     public List<Venta> listar() {
         return ventaRepository.findAll();
@@ -46,15 +44,11 @@ public class VentaService {
                 sumaTotal += subtotal;
 
                 if ("PRODUCTO".equalsIgnoreCase(item.getTipoItem()) && item.getProducto() != null) {
-                    Producto prodBD = productoService.buscarPorId(item.getProducto().getId()); // Este error se
-                                                                                               // arreglará cuando se
-                                                                                               // creen los métodos en
-                                                                                               // ProductoService
+                    Producto prodBD = productoService.buscarPorId(item.getProducto().getId());
                     if (prodBD != null) {
                         int nuevoStock = prodBD.getStock() - item.getCantidad();
-                        prodBD.setStock(Math.max(0, nuevoStock)); // Evita stock negativo
-                        productoService.guardar(prodBD); // Este error se arreglará cuando se creen los métodos en
-                                                         // ProductoService
+                        prodBD.setStock(Math.max(0, nuevoStock));
+                        productoService.guardar(prodBD);
                     }
                 }
             }
