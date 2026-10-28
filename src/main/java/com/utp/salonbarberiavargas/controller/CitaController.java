@@ -237,3 +237,4 @@ public class CitaController {
         return (offset != 0) ? ("redirect:/citas?offset=" + offset) : "redirect:/citas";
     }
 }
+
