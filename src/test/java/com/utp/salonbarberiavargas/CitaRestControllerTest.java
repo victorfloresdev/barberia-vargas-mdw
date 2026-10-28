@@ -35,7 +35,7 @@ class CitaRestControllerTest {
 
     @Test
     void testListarCitasRest() throws Exception {
-        Cliente cli = new Cliente("1", "Juan Pérez", "987654321", "2026-09-20");
+        Cliente cli = new Cliente(1, "Juan Pérez", "987654321", "2026-09-20");
         Servicio srv = new Servicio(1, "Corte Fade", "Corte degradado", 30, 25.0);
         Cita cita = new Cita(1, cli, srv, "2026-09-25", "10:00", 25.0, "Confirmada", "Carlos Vargas");
 
@@ -49,7 +49,7 @@ class CitaRestControllerTest {
 
     @Test
     void testCrearCitaRestValida() throws Exception {
-        Cliente cli = new Cliente("1", "Juan Pérez", "987654321", "2026-09-20");
+        Cliente cli = new Cliente(1, "Juan Pérez", "987654321", "2026-09-20");
         Servicio srv = new Servicio(1, "Corte Fade", "Corte degradado", 30, 25.0);
         Cita guardada = new Cita(1, cli, srv, "2026-09-25", "10:00", 25.0, "Confirmada", "Carlos Vargas");
 
@@ -57,8 +57,18 @@ class CitaRestControllerTest {
 
         String jsonValido = """
             {
-                "cliente": {"id": "1"},
-                "servicio": {"id_servicio": 1},
+                "cliente": {
+                    "id": 1,
+                    "nombreCompleto": "Juan Pérez",
+                    "telefono": "987654321"
+                },
+                "servicio": {
+                    "id_servicio": 1,
+                    "nombre_servicio": "Corte Fade",
+                    "descripcion": "Corte degradado",
+                    "duracion_estimada": 30,
+                    "precio": 25.0
+                },
                 "fecha": "2026-09-25",
                 "hora": "10:00",
                 "precio": 25.0,
