@@ -14,9 +14,9 @@ import com.utp.salonbarberiavargas.controller.CitaController;
 import com.utp.salonbarberiavargas.model.Cita;
 import com.utp.salonbarberiavargas.model.Cliente;
 import com.utp.salonbarberiavargas.model.Servicio;
-import com.utp.salonbarberiavargas.repository.ClienteRepository;
-import com.utp.salonbarberiavargas.repository.ServicioRepository;
 import com.utp.salonbarberiavargas.service.CitaService;
+import com.utp.salonbarberiavargas.service.ClienteService;
+import com.utp.salonbarberiavargas.service.ServicioService;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,10 +39,10 @@ class CitaControllerTest {
     private CitaService citaService;
 
     @MockitoBean
-    private ClienteRepository clienteRepository;
+    private ClienteService clienteService;
 
     @MockitoBean
-    private ServicioRepository servicioRepository;
+    private ServicioService servicioService;
 
     private List<Cita> citasPrueba;
 
@@ -64,8 +64,8 @@ class CitaControllerTest {
 
         when(citaService.listar()).thenReturn(citasPrueba);
         when(citaService.guardar(any(Cita.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(clienteRepository.findAll()).thenReturn(List.of(cli1, cli2, cli3));
-        when(servicioRepository.findAll()).thenReturn(List.of(srv1, srv2, srv3));
+        when(clienteService.listar()).thenReturn(List.of(cli1, cli2, cli3));
+        when(servicioService.listar()).thenReturn(List.of(srv1, srv2, srv3));
     }
 
     @Test

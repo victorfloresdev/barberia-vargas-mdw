@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.utp.salonbarberiavargas.model.Cita;
 import com.utp.salonbarberiavargas.model.Cliente;
 import com.utp.salonbarberiavargas.model.Servicio;
-import com.utp.salonbarberiavargas.repository.ClienteRepository;
-import com.utp.salonbarberiavargas.repository.ServicioRepository;
 import com.utp.salonbarberiavargas.service.CitaService;
+import com.utp.salonbarberiavargas.service.ClienteService;
+import com.utp.salonbarberiavargas.service.ServicioService;
 
 @Controller
 public class CitaController {
@@ -29,10 +29,10 @@ public class CitaController {
     private CitaService citaService;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteService clienteService;
 
     @Autowired
-    private ServicioRepository servicioRepository;
+    private ServicioService servicioService;
 
     private String obtenerNombreMes(int mes) {
         String[] meses = {
@@ -67,8 +67,8 @@ public class CitaController {
     @GetMapping("/citas")
     public String mostrarCitas(@RequestParam(name = "offset", defaultValue = "0") int offset, Model model) {
         List<Cita> listaCitas = citaService.listar();
-        List<Cliente> listaClientes = clienteRepository.findAll();
-        List<Servicio> listaServicios = servicioRepository.findAll();
+        List<Cliente> listaClientes = clienteService.listar();
+        List<Servicio> listaServicios = servicioService.listar();
 
         model.addAttribute("listaCitas", listaCitas);
         model.addAttribute("listaClientes", listaClientes);
@@ -148,11 +148,11 @@ public class CitaController {
                               @RequestParam(name = "offset", defaultValue = "0") int offset) {
 
         if (nuevaCita.getCliente() == null && idCliente != null) {
-            nuevaCita.setCliente(clienteRepository.findById(idCliente).orElse(null));
+            nuevaCita.setCliente(clienteService.buscarPorId(idCliente));
         }
 
         if (nuevaCita.getServicio() == null && idServicio != null) {
-            Servicio serv = servicioRepository.findById(idServicio).orElse(null);
+            Servicio serv = servicioService.buscarPorId(idServicio);
             nuevaCita.setServicio(serv);
             if (serv != null && (nuevaCita.getPrecio() == null || nuevaCita.getPrecio() <= 0)) {
                 nuevaCita.setPrecio(serv.getPrecio());
@@ -196,13 +196,13 @@ public class CitaController {
                 }
 
                 if (idCliente != null) {
-                    existente.setCliente(clienteRepository.findById(idCliente).orElse(existente.getCliente()));
+                    existente.setCliente(clienteService.buscarPorId(idCliente));
                 } else if (citaEditada.getCliente() != null) {
                     existente.setCliente(citaEditada.getCliente());
                 }
 
                 if (idServicio != null) {
-                    Servicio serv = servicioRepository.findById(idServicio).orElse(existente.getServicio());
+                    Servicio serv = servicioService.buscarPorId(idServicio);
                     existente.setServicio(serv);
                     if (serv != null) {
                         existente.setPrecio(serv.getPrecio());
