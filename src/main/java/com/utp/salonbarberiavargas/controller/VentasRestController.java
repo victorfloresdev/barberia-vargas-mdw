@@ -75,6 +75,10 @@ public class VentasRestController {
         }
 
         venta.setIdVenta(id);
+        if (venta.getItems() == null || venta.getItems().isEmpty()) {
+            venta.setItems(ventaExistente.getItems());
+        }
+
         Venta ventaActualizada = ventaService.guardar(venta);
         return ResponseEntity.ok(ventaActualizada);
     }

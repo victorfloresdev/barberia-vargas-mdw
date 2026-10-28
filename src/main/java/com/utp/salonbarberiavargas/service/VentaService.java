@@ -33,9 +33,8 @@ public class VentaService {
             venta.setFecha(LocalDateTime.now());
         }
 
-        double sumaTotal = 0.0;
-
-        if (venta.getItems() != null) {
+        if (venta.getItems() != null && !venta.getItems().isEmpty()) {
+            double sumaTotal = 0.0;
             for (ItemVenta item : venta.getItems()) {
                 item.setVenta(venta);
 
@@ -52,9 +51,11 @@ public class VentaService {
                     }
                 }
             }
+            venta.setTotal(sumaTotal);
+        } else if (venta.getTotal() == null) {
+            venta.setTotal(0.0);
         }
 
-        venta.setTotal(sumaTotal);
         return ventaRepository.save(venta);
     }
 
