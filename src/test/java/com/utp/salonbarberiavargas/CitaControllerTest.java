@@ -49,9 +49,9 @@ class CitaControllerTest {
     @BeforeEach
     void setUp() {
         citasPrueba = new ArrayList<>();
-        Cliente cli1 = new Cliente("1", "Juan Pérez", "987654321", "2026-09-20");
-        Cliente cli2 = new Cliente("2", "Carlos Ruiz", "912345678", "2026-09-21");
-        Cliente cli3 = new Cliente("3", "Marcos Lima", "998877665", "2026-09-22");
+        Cliente cli1 = new Cliente(1, "Juan Pérez", "987654321", "2026-09-20");
+        Cliente cli2 = new Cliente(2, "Carlos Ruiz", "912345678", "2026-09-21");
+        Cliente cli3 = new Cliente(3, "Marcos Lima", "998877665", "2026-09-22");
 
         Servicio srv1 = new Servicio(1, "Corte Fade", "Corte degradado", 30, 25.0);
         Servicio srv2 = new Servicio(2, "Barba Spa", "Perfilado de barba", 20, 20.0);
