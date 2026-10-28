@@ -14,6 +14,7 @@ import com.utp.salonbarberiavargas.model.Producto;
 import com.utp.salonbarberiavargas.model.Venta;
 import com.utp.salonbarberiavargas.service.CitaService;
 import com.utp.salonbarberiavargas.service.VentaService;
+import com.utp.salonbarberiavargas.service.ProductoService;
 
 @Controller
 public class IndexController {

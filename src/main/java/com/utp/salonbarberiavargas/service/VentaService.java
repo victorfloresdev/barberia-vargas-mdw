@@ -10,6 +10,7 @@ import com.utp.salonbarberiavargas.model.ItemVenta;
 import com.utp.salonbarberiavargas.model.Producto;
 import com.utp.salonbarberiavargas.model.Venta;
 import com.utp.salonbarberiavargas.repository.VentaRepository;
+import com.utp.salonbarberiavargas.service.ProductoService; // Este error se arreglará cuando se cree el service de producto
 
 import jakarta.transaction.Transactional;
 
